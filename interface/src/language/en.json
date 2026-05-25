@@ -181,5 +181,11 @@
   },
   "Confirmation": {
     "Dialog": "Confirmation Dialog"
+  },
+  "Import": {
+    "Button": "Import from BeerSmith",
+    "Title": "Import BeerSmith Recipe",
+    "SelectFile": "Select File",
+    "Apply": "Apply to Device"
   }
 }

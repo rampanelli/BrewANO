@@ -3,8 +3,13 @@ import MenuAppBar from '../components/MenuAppBar';
 import MashSettings from './MashSettings';
 import BoilSettings from './BoilSettings';
 import BrewSettings from './BrewSettings'
+import BeerSmithImport from '../components/BeerSmithImport'
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogContent from '@material-ui/core/DialogContent';
 import IntText from '../components/IntText'
 import { PageView, initGA, Event } from '../components/Tracking'
 
@@ -12,7 +17,8 @@ class BrewConfiguration extends Component {
   constructor() {
     super();
     this.state = {
-      selectedTab: 'MashSettings'
+      selectedTab: 'MashSettings',
+      importOpen: false
     }
   }
 
@@ -27,8 +33,16 @@ class BrewConfiguration extends Component {
     })
   }
 
+  handleImportOpen = () => {
+    this.setState({ importOpen: true });
+  }
+
+  handleImportClose = () => {
+    this.setState({ importOpen: false });
+  }
+
   render() {
-    const { selectedTab } = this.state
+    const { selectedTab, importOpen } = this.state
     return (
       <MenuAppBar sectionTitle="Brew Settings">
         <Tabs value={selectedTab} onChange={this.handleTabChange} indicatorColor="secondary" textColor="contrastText" fullWidth scrollable>
@@ -36,6 +50,26 @@ class BrewConfiguration extends Component {
           <Tab value="BoilSettings" label={<IntText text="Boil" />} />
           <Tab value="BrewSettings" label={<IntText text="BrewSettings.Settings" />} />
         </Tabs>
+        <Button
+          variant="outlined"
+          size="small"
+          onClick={this.handleImportOpen}
+          style={{ margin: '8px 12px' }}
+        >
+          <IntText text="Import.Button" />
+        </Button>
+        <Dialog open={importOpen} onClose={this.handleImportClose} maxWidth="md" fullWidth>
+          <DialogTitle><IntText text="Import.Title" /></DialogTitle>
+          <DialogContent>
+            <BeerSmithImport
+              onCancel={this.handleImportClose}
+              onImported={() => {
+                this.handleImportClose();
+                window.location.reload();
+              }}
+            />
+          </DialogContent>
+        </Dialog>
         {selectedTab === "MashSettings" && <MashSettings />}
         {selectedTab === "BoilSettings" && <BoilSettings />}
         {selectedTab === "BrewSettings" && <BrewSettings />}
