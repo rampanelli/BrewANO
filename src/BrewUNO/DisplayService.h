@@ -11,14 +11,14 @@
 
 #define PCF8574_ADDRESS 0x20
 
-#define apmode_icon 1
-#define stmode_icon 2
-#define gpump_icon 3
-#define pheater_icon 4
-#define sheater_icon 5
-#define gcelsius_icon 6
-#define gwm_icon 7
-#define gpw_icon 8
+#define apmode_icon 0
+#define stmode_icon 1
+#define gpump_icon 2
+#define pheater_icon 3
+#define sheater_icon 4
+#define gcelsius_icon 5
+#define gwm_icon 6
+#define gpw_icon 7
 
 class DisplayService
 {

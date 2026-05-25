@@ -24,7 +24,7 @@ private:
   float _x = 0.5, _y = 0.5;
   uint32_t _rgb = 0;
   uint8_t _id = 0;
-  EspalexaDeviceType _type;
+  EspalexaDeviceType _type = EspalexaDeviceType::dimmable;
   EspalexaDeviceProperty _changed = EspalexaDeviceProperty::none;
   EspalexaColorMode _mode = EspalexaColorMode::xy;
   

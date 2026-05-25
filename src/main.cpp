@@ -108,21 +108,6 @@ KeyButton button3(btn3, pcf8574);
 KeyButton button4(btn4, pcf8574);
 KeyPadService keypad = KeyPadService(&activeStatus, &pcf8574, &brewService, &brewSettingsService, &pump, &button1, &button2, &button3, &button4);
 
-int Dimmer = 0;
-char Device1[] = "BrewUNO";    
-char Device2[] = "Mostura";
-char Device3[] = "Fervura";
-char Device4[] = "Avanço"; 
-char Device5[] = "Circulação";
-char Device6[] = "Bomba";
-char Device7[] = "Pausa";
-char Device8[] = "Resumo";
-char Device9[] = "P W M";
-
-     
-EspalexaDevice* espalexaPointer;
-//Espalexa espalexa;
-
 void AlexaCommands(EspalexaDevice* espalexaPointer) { 
    if(espalexaPointer == nullptr) return;
    int AlexaPercent = espalexaPointer->getPercent();
@@ -283,25 +268,15 @@ void setup()
   pcfWire.setClock(100000L);
   pcf8574.begin();
 
-  espalexaPointer = new EspalexaDevice(Device1, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device2, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device3, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device4, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device5, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device6, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device7, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device8, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);
-  espalexaPointer = new EspalexaDevice(Device9, AlexaCommands, EspalexaDeviceType::dimmable, Dimmer * 2.55); 
-  espalexa.addDevice(espalexaPointer);  
-   //espalexa.begin();
+  espalexa.addDevice("BrewUNO", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("Mostura", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("Fervura", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("Avanço", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("Circulação", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("Bomba", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("Pausa", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("Resumo", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("P W M", AlexaCommands, EspalexaDeviceType::dimmable, 0);
   espalexa.begin(&server);
   
 }

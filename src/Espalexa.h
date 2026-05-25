@@ -581,7 +581,11 @@ public:
     return perc / 255;
   }
   
-  ~Espalexa(){delete devices;} //note: Espalexa is NOT meant to be destructed
+  ~Espalexa() {
+    for (uint8_t i = 0; i < currentDeviceCount; i++) {
+      delete devices[i];
+    }
+  }
 };
 
 #endif

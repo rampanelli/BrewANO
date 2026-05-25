@@ -48,8 +48,15 @@ void BoilKettleHeaterService::StartPID(double kp, double ki, double kd)
   _boilKettlePID.SetOutputLimits(0.0, 1.0);  // Forces minimum up to 0.0
   _boilKettlePID.SetOutputLimits(-1.0, 0.0); // Forces maximum down to 0.0
   _boilKettlePID.SetTunings(kp, ki, kd, P_ON_M);
-  _boilKettlePID.SetOutputLimits(0, 1023);
+  _boilKettlePID.SetOutputLimits(0, PWM_MAX);
+  _boilKettlePID.SetSampleTime(SSR_WINDOW_MS);
   _boilKettlePID.SetMode(AUTOMATIC);
+  _windowStartTime = 0;
+}
+
+void BoilKettleHeaterService::TurnOff()
+{
+  digitalWrite(GetBus(), InvertedPWM() ? HIGH : LOW);
 }
 
 void BoilKettleHeaterService::SetPidParameters(double input, double setpoint)
@@ -74,13 +81,4 @@ bool BoilKettleHeaterService::InvertedPWM()
 boolean BoilKettleHeaterService::StopCompute()
 {
   return !_activeStatus->BrewStarted || _activeStatus->ActiveStep != boil;
-}
-
-void BoilKettleHeaterService::TurnOff()
-{
-  if (!_activeStatus->BrewStarted || _activeStatus->EnableBoilKettle)
-  {
-    analogWrite(BOIL_HEATER_BUS, 1023);
-    digitalWrite(BOIL_HEATER_BUS, HIGH);
-  }
 }

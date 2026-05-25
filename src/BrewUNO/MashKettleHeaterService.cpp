@@ -46,8 +46,19 @@ void MashKettleHeaterService::StartPID(double kp, double ki, double kd)
   _mashKettlePID.SetOutputLimits(0.0, 1.0);  // Forces minimum up to 0.0
   _mashKettlePID.SetOutputLimits(-1.0, 0.0); // Forces maximum down to 0.0
   _mashKettlePID.SetTunings(kp, ki, kd, P_ON_M);
-  _mashKettlePID.SetOutputLimits(0, 1023);
+  _mashKettlePID.SetOutputLimits(0, PWM_MAX);
+  _mashKettlePID.SetSampleTime(SSR_WINDOW_MS);
   _mashKettlePID.SetMode(AUTOMATIC);
+  _windowStartTime = 0;
+}
+
+void MashKettleHeaterService::TurnOff()
+{
+  if (!_activeStatus->BrewStarted ||
+      (_activeStatus->ActiveStep == boil && _activeStatus->EnableBoilKettle) ||
+      (_activeStatus->ActiveStep == mash && _activeStatus->PumpIsResting) ||
+      (_activeStatus->ActiveStep == mash && !_activeStatus->HeaterOn))
+    digitalWrite(GetBus(), LOW);
 }
 
 void MashKettleHeaterService::SetPidParameters(double input, double setpoint)
@@ -71,13 +82,4 @@ boolean MashKettleHeaterService::StopCompute()
          _activeStatus->ActiveStep != mash ||
          _activeStatus->PumpIsResting ||
          !_activeStatus->HeaterOn;
-}
-
-void MashKettleHeaterService::TurnOff()
-{
-  if (!_activeStatus->BrewStarted ||
-      (_activeStatus->ActiveStep == boil && _activeStatus->EnableBoilKettle) ||
-      (_activeStatus->ActiveStep == mash && _activeStatus->PumpIsResting) ||
-      (_activeStatus->ActiveStep == mash && !_activeStatus->HeaterOn))
-    analogWrite(GetBus(), 0);
 }

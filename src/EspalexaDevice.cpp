@@ -2,7 +2,13 @@
 
 #include "EspalexaDevice.h"
 
-EspalexaDevice::EspalexaDevice(){}
+EspalexaDevice::EspalexaDevice(){
+  _val = 0;
+  _val_last = 0;
+  _callback = nullptr;
+  _callbackDev = nullptr;
+  _callbackCol = nullptr;
+}
 
 EspalexaDevice::EspalexaDevice(String deviceName, BrightnessCallbackFunction gnCallback, uint8_t initialValue) { //constructor for dimmable device
   

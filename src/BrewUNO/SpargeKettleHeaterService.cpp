@@ -41,8 +41,15 @@ void SpargeKettleHeaterService::StartPID(double kp, double ki, double kd)
   _spargeKettlePID.SetOutputLimits(0.0, 1.0);  // Forces minimum up to 0.0
   _spargeKettlePID.SetOutputLimits(-1.0, 0.0); // Forces maximum down to 0.0
   _spargeKettlePID.SetTunings(kp, ki, kd, P_ON_M);
-  _spargeKettlePID.SetOutputLimits(0, 1023);
+  _spargeKettlePID.SetOutputLimits(0, PWM_MAX);
+  _spargeKettlePID.SetSampleTime(SSR_WINDOW_MS);
   _spargeKettlePID.SetMode(AUTOMATIC);
+  _windowStartTime = 0;
+}
+
+void SpargeKettleHeaterService::TurnOff()
+{
+  digitalWrite(GetBus(), LOW);
 }
 
 void SpargeKettleHeaterService::SetPidParameters(double input, double setpoint)
@@ -65,9 +72,4 @@ bool SpargeKettleHeaterService::InvertedPWM()
 boolean SpargeKettleHeaterService::StopCompute()
 {
   return !_activeStatus->BrewStarted || !_activeStatus->EnableSparge || _activeStatus->ActiveStep != mash || _activeStatus->PWM > 100;
-}
-
-void SpargeKettleHeaterService::TurnOff()
-{
-  analogWrite(GetBus(), 0);
 }

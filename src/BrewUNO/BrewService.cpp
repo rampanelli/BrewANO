@@ -126,9 +126,9 @@ void BrewService::stopBrew()
 {
     _activeStatus->SaveActiveStatus(0, 0, 0, 0, -1, "", 0, 0, none, false);
     _pump->TurnPumpOff();
-    _mashKettleHeaterService->Compute(_activeStatus->Temperature, _activeStatus->TargetTemperature, _brewSettingsService->MashHeaterPercentage);
-    _spargeKettleHeaterService->Compute(_activeStatus->SpargeTemperature, _brewSettingsService->SpargeTemperature, _brewSettingsService->SpargePowerPercentage);
-    _boilKettleHeaterService->Compute(_activeStatus->BoilTemperature, _brewSettingsService->BoilTemperature, _brewSettingsService->BoilPowerPercentage);
+    digitalWrite(HEATER_BUS, LOW);
+    digitalWrite(SPARGE_HEATER_BUS, LOW);
+    digitalWrite(BOIL_HEATER_BUS, LOW);
 }
 
 void BrewService::nextStepHttp(AsyncWebServerRequest *request)
