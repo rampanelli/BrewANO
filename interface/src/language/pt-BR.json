@@ -184,8 +184,8 @@
     "Dialog": "Confirmação"
   },
   "Import": {
-    "Button": "Importar do BeerSmith",
-    "Title": "Importar Receita do BeerSmith",
+    "Button": "Importar do BeerSmith / BrewFather",
+    "Title": "Importar Receita (BeerSmith / BrewFather)",
     "SelectFile": "Selecionar Arquivo",
     "Apply": "Aplicar ao Dispositivo"
   }

@@ -183,8 +183,8 @@
     "Dialog": "Confirmation Dialog"
   },
   "Import": {
-    "Button": "Import from BeerSmith",
-    "Title": "Import BeerSmith Recipe",
+    "Button": "Import from BeerSmith / BrewFather",
+    "Title": "Import Recipe (BeerSmith / BrewFather)",
     "SelectFile": "Select File",
     "Apply": "Apply to Device"
   }

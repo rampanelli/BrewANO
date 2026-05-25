@@ -7,6 +7,22 @@ const parseKgToGrams = (amount) => {
   return Math.round(amount);
 };
 
+const buildMashStep = (name, temp, time) => ({
+  n: name,
+  t: toCelsius(parseFloat(temp)),
+  tm: parseInt(time),
+  r: true,
+  sl: false,
+  ho: true,
+  fp: false
+});
+
+const buildBoilStep = (name, time, amount) => ({
+  n: name,
+  tm: parseInt(time),
+  a: amount ? parseKgToGrams(parseFloat(amount)) : 0
+});
+
 function parseBSMX(xmlDoc) {
   const mashSteps = [];
   const boilSteps = [];
@@ -24,15 +40,7 @@ function parseBSMX(xmlDoc) {
     const temp = parseFloat(getText(step, "F_MS_STEP_TEMP") || "0");
     const time = parseInt(getText(step, "F_MS_STEP_TIME") || "0");
     if (name && temp > 0 && time > 0) {
-      mashSteps.push({
-        n: name,
-        t: toCelsius(temp),
-        tm: time,
-        r: true,
-        sl: false,
-        ho: true,
-        fp: false
-      });
+      mashSteps.push(buildMashStep(name, temp, time));
     }
   });
 
@@ -42,11 +50,7 @@ function parseBSMX(xmlDoc) {
     const time = parseInt(getText(hop, "F_H_BOIL_TIME") || "0");
     const amount = getText(hop, "F_H_AMOUNT");
     if (name && time > 0) {
-      boilSteps.push({
-        n: name,
-        tm: time,
-        a: amount ? parseKgToGrams(parseFloat(amount)) : 0
-      });
+      boilSteps.push(buildBoilStep(name, time, amount));
     }
   });
 
@@ -70,15 +74,7 @@ function parseBeerXML(xmlDoc) {
     const temp = parseFloat(getText(step, "STEP_TEMP") || "0");
     const time = parseInt(getText(step, "STEP_TIME") || "0");
     if (name && temp > 0 && time > 0) {
-      mashSteps.push({
-        n: name,
-        t: toCelsius(temp),
-        tm: time,
-        r: true,
-        sl: false,
-        ho: true,
-        fp: false
-      });
+      mashSteps.push(buildMashStep(name, temp, time));
     }
   });
 
@@ -88,18 +84,14 @@ function parseBeerXML(xmlDoc) {
     const time = parseInt(getText(hop, "TIME") || "0");
     const amount = getText(hop, "AMOUNT");
     if (name && time > 0) {
-      boilSteps.push({
-        n: name,
-        tm: time,
-        a: amount ? parseKgToGrams(parseFloat(amount)) : 0
-      });
+      boilSteps.push(buildBoilStep(name, time, amount));
     }
   });
 
   return { mashSteps, boilSteps, brewSettings };
 }
 
-function parseJSON(json) {
+function parseBeerSmithJSON(json) {
   const mashSteps = [];
   const boilSteps = [];
   let brewSettings = {};
@@ -109,12 +101,33 @@ function parseJSON(json) {
   if (json.mash && json.mash.mash_steps) {
     json.mash.mash_steps.forEach(step => {
       if (step.name && step.step_temp > 0 && step.step_time > 0) {
-        mashSteps.push({
-          n: step.name,
-          t: toCelsius(parseFloat(step.step_temp)),
-          tm: parseInt(step.step_time),
-          r: true, sl: false, ho: true, fp: false
-        });
+        mashSteps.push(buildMashStep(step.name, step.step_temp, step.step_time));
+      }
+    });
+  }
+
+  if (json.hops) {
+    json.hops.forEach(hop => {
+      if (hop.name && hop.time > 0) {
+        boilSteps.push(buildBoilStep(hop.name, hop.time, hop.amount));
+      }
+    });
+  }
+
+  return { mashSteps, boilSteps, brewSettings };
+}
+
+function parseBrewFatherJSON(json) {
+  const mashSteps = [];
+  const boilSteps = [];
+  let brewSettings = {};
+
+  if (json.boilTime) brewSettings.bt = parseInt(json.boilTime);
+
+  if (json.mash && json.mash.steps) {
+    json.mash.steps.forEach(step => {
+      if (step.name && step.stepTemperature > 0 && step.stepTime > 0) {
+        mashSteps.push(buildMashStep(step.name, step.stepTemperature, step.stepTime));
       }
     });
   }
@@ -125,13 +138,35 @@ function parseJSON(json) {
         boilSteps.push({
           n: hop.name,
           tm: parseInt(hop.time),
-          a: hop.amount ? parseKgToGrams(parseFloat(hop.amount)) : 0
+          a: hop.amount ? Math.round(parseFloat(hop.amount)) : 0
         });
       }
     });
   }
 
+  if (json.fermentation && json.fermentation.steps) {
+    json.fermentation.steps.forEach(step => {
+      if (step.name && step.stepTemperature > 0 && step.stepTime > 0) {
+        mashSteps.push(buildMashStep(step.name, step.stepTemperature, step.stepTime));
+      }
+    });
+  }
+
   return { mashSteps, boilSteps, brewSettings };
+}
+
+function isBrewFatherJSON(json) {
+  if (json.mash && json.mash.steps && json.mash.steps.length > 0) {
+    const step = json.mash.steps[0];
+    return step.stepTemperature !== undefined || step.stepTime !== undefined;
+  }
+  return false;
+}
+
+function isBeerSmithJSON(json) {
+  if (json.mash && json.mash.mash_steps) return true;
+  if (json.boil_time) return true;
+  return false;
 }
 
 function getText(parent, tagName) {
@@ -158,8 +193,17 @@ export function parseBeerSmithFile(fileContent, fileName) {
 
   try {
     const json = JSON.parse(fileContent);
-    return parseJSON(json);
+
+    if (isBrewFatherJSON(json)) {
+      return parseBrewFatherJSON(json);
+    }
+
+    if (isBeerSmithJSON(json)) {
+      return parseBeerSmithJSON(json);
+    }
+
+    return parseBrewFatherJSON(json);
   } catch (e) {
-    throw new Error("Unsupported file format. Please use BeerSmith .bsmx, BeerXML .xml, or BeerSmith JSON export.");
+    throw new Error("Unsupported file format. Please use BeerSmith .bsmx, BeerXML .xml, BrewFather JSON, or BeerSmith JSON export.");
   }
 }
