@@ -123,7 +123,7 @@ class NTPStatus extends Component {
     const { data, fetched, errorMessage, classes, fullDetails } = this.props;
 
     return (
-      <SectionContent title={<IntText text="NTPSettings.NTPStatus" />}>
+      <SectionContent title="">
         {
           !fetched ?
             <div>

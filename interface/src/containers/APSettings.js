@@ -5,8 +5,6 @@ import { restComponent } from '../components/RestComponent';
 import SectionContent from '../components/SectionContent';
 import APSettingsForm from '../forms/APSettingsForm';
 
-import IntText from '../components/IntText'
-
 class APSettings extends Component {
 
   componentDidMount() {
@@ -16,7 +14,7 @@ class APSettings extends Component {
   render() {
     const { data, fetched, errorMessage } = this.props;
     return (
-      <SectionContent title={<IntText text="APSettings.Settings" />}>
+      <SectionContent title="">
         <APSettingsForm
           apSettings={data}
           apSettingsFetched={fetched}

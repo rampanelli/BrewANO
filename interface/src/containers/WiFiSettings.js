@@ -4,7 +4,6 @@ import { WIFI_SETTINGS_ENDPOINT }  from  '../constants/Endpoints';
 import { restComponent } from '../components/RestComponent';
 import SectionContent from '../components/SectionContent';
 import WiFiSettingsForm from '../forms/WiFiSettingsForm';
-import IntText from '../components/IntText'
 
 class WiFiSettings extends Component {
 
@@ -37,7 +36,7 @@ class WiFiSettings extends Component {
   render() {
     const { data, fetched, errorMessage, selectedNetwork } = this.props;
     return (
-      <SectionContent title={<IntText text="WiFiSettings.Settings" />}>
+      <SectionContent title="">
       	<WiFiSettingsForm
           wifiSettings={data}
           wifiSettingsFetched={fetched}

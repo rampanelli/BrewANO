@@ -1,8 +1,9 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useRef, useEffect } from 'react';
 
 const LayoutContext = createContext({
   modernLayout: false,
   toggleLayout: () => {},
+  langKey: 0,
 });
 
 const LAYOUT_KEY = 'brewuno_modern_layout';
@@ -17,8 +18,15 @@ function getInitialLayout() {
   return true;
 }
 
+var _setLangKeyCallback = null;
+
+export function notifyLangChanged() {
+  if (_setLangKeyCallback) _setLangKeyCallback();
+}
+
 export function LayoutProvider({ children }) {
   const [modernLayout, setModernLayout] = useState(getInitialLayout);
+  const [langKey, setLangKey] = useState(0);
 
   const toggleLayout = useCallback(() => {
     setModernLayout(prev => {
@@ -30,8 +38,13 @@ export function LayoutProvider({ children }) {
     });
   }, []);
 
+  useEffect(() => {
+    _setLangKeyCallback = () => setLangKey(k => k + 1);
+    return () => { _setLangKeyCallback = null; };
+  }, []);
+
   return (
-    <LayoutContext.Provider value={{ modernLayout, toggleLayout }}>
+    <LayoutContext.Provider value={{ modernLayout, toggleLayout, langKey }}>
       {children}
     </LayoutContext.Provider>
   );

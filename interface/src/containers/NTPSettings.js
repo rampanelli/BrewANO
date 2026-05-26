@@ -5,8 +5,6 @@ import { restComponent } from '../components/RestComponent';
 import SectionContent from '../components/SectionContent';
 import NTPSettingsForm from '../forms/NTPSettingsForm';
 
-import IntText from '../components/IntText'
-
 class NTPSettings extends Component {
 
   componentDidMount() {
@@ -16,7 +14,7 @@ class NTPSettings extends Component {
   render() {
     const { data, fetched, errorMessage } = this.props;
     return (
-      <SectionContent title={<IntText text="NTPSettings.Settings" />}>
+      <SectionContent title="">
         <NTPSettingsForm
           ntpSettings={data}
           ntpSettingsFetched={fetched}

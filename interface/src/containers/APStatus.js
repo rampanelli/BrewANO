@@ -104,7 +104,7 @@ class APStatus extends Component {
     const { data, fetched, errorMessage, classes, fullDetails } = this.props;
 
     return (
-      <SectionContent title={<IntText text="APSettings.APStatus" />}>
+      <SectionContent title="">
         {
           !fetched ?
             <div>

@@ -103,7 +103,7 @@ class WiFiNetworkScanner extends Component {
   render() {
     const { scanningForNetworks, networkList, errorMessage } = this.state;
     return (
-      <SectionContent title={<IntText text="WiFiSettings.NetworkScanner" />}>
+      <SectionContent title="">
         <WiFiNetworkSelector scanningForNetworks={scanningForNetworks}
           networkList={networkList}
           errorMessage={errorMessage}

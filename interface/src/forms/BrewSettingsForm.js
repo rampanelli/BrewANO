@@ -10,7 +10,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
-import Divider from '@material-ui/core/Divider';
 import { Grid, Paper } from '@material-ui/core';
 import IntText from '../components/IntText'
 import LayoutContext from '../context/LayoutContext'
@@ -428,31 +427,36 @@ class BrewSettingsForm extends Component {
                 </Grid>
 
                 <div style={{ marginTop: 20, }}>
-                  <LayoutContext.Consumer>
-                    {({ modernLayout, toggleLayout }) => (
-                      <Paper className={classes.paper} style={{ marginBottom: 16 }}>
-                        <Typography variant="subtitle1" style={{ marginBottom: 8 }}>
-                          <IntText text="Layout.Classic" /> / <IntText text="Layout.Modern" />
-                        </Typography>
-                        <Divider style={{ marginBottom: 12 }} />
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              checked={modernLayout}
-                              onChange={toggleLayout}
-                              color="secondary"
-                            />
-                          }
-                          label={
-                            <Typography variant="body2">
-                              {modernLayout ? <IntText text="Layout.SwitchToClassic" /> : <IntText text="Layout.SwitchToModern" />}
+                  <Grid container spacing={16}>
+                    <Grid item xs={12}>
+                      <LayoutContext.Consumer>
+                        {({ modernLayout, toggleLayout }) => (
+                          <Paper className={classes.root} style={PaperStyle}>
+                            <Typography className={classes.formControl} color="textSecondary">
+                              <IntText text="Layout.Classic" /> / <IntText text="Layout.Modern" />
                             </Typography>
-                          }
-                        />
-                      </Paper>
-                    )}
-                  </LayoutContext.Consumer>
-                  <Button variant="raised" fullWidth color="secondary" type="submit">
+                            <div style={{ marginTop: 0, marginLeft: 20, padding: 0 }}>
+                              <FormControlLabel
+                                control={
+                                  <Switch
+                                    checked={modernLayout}
+                                    onChange={toggleLayout}
+                                    color="secondary"
+                                  />
+                                }
+                                label={
+                                  <Typography variant="body2">
+                                    {modernLayout ? <IntText text="Layout.SwitchToClassic" /> : <IntText text="Layout.SwitchToModern" />}
+                                  </Typography>
+                                }
+                              />
+                            </div>
+                          </Paper>
+                        )}
+                      </LayoutContext.Consumer>
+                    </Grid>
+                  </Grid>
+                  <Button variant="raised" fullWidth color="secondary" type="submit" style={{ marginTop: 16 }}>
                     {<IntText text="Save" />}
                   </Button>
                 </div>

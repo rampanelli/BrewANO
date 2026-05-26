@@ -5,7 +5,6 @@ import { restComponent } from '../components/RestComponent';
 import { GET_SENSORS } from '../constants/Endpoints';
 import { ExecuteRestCall } from '../components/Utils';
 import { BREW_SETTINGS_ENDPOINT } from '../constants/Endpoints';
-import IntText from '../components/IntText'
 
 class BrewSettings extends Component {
   constructor(props) {
@@ -26,7 +25,7 @@ class BrewSettings extends Component {
     const { data, fetched, errorMessage } = this.props;
     console.log(data)
     return (
-      <SectionContent title={<IntText text="BrewSettings.Settings" />}>
+      <SectionContent title="">
         <BrewSettingsForm
           brewSettings={data}
           brewSettingsFetched={fetched}

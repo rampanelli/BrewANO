@@ -97,7 +97,7 @@ class MashSettings extends Component {
 
   render() {
     return (
-      <SectionContent title={<IntText text="MashSettings.Settings" />} selected={this.props.selectedIndex >= 0}>
+      <SectionContent title="" selected={this.props.selectedIndex >= 0}>
         {!this.props.listOnly ?
           <MashSettingsForm callbackItemAdded={this.itemAdded} ref={this.child} />
           : null}

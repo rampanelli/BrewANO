@@ -67,7 +67,7 @@ const modernTheme = createMuiTheme({
   },
   typography: {
     useNextVariants: true,
-    fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif',
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     h6: {
       fontWeight: 600,
       letterSpacing: '-0.02em',
