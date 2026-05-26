@@ -35,7 +35,7 @@ const styles = theme => ({
   }
 })
 var PaperStyle = {
-  background: '#313131'
+  background: 'inherit'
 }
 
 class BrewSettingsForm extends Component {
@@ -66,7 +66,7 @@ class BrewSettingsForm extends Component {
                 <IntText ref={this.child} />
                 <Grid container spacing={16} justify="center">
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="Language" /></Typography>
                       <Select className={classes.formControl}
@@ -104,7 +104,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="MainSensor" /></Typography>
                       <Select className={classes.formControl}
@@ -130,7 +130,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="BrewSettings.MashBoilPWM" /></Typography>
                       <TextValidator className={classes.formControl}
@@ -179,7 +179,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="SpargeSensor" /></Typography>
                       <div style={{ marginTop: 0, marginLeft: 20, padding: 0 }}>
@@ -241,7 +241,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="BoilSensor" /></Typography>
                       <div style={{ marginTop: 0, marginLeft: 20, padding: 0 }}>
@@ -282,7 +282,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.Pump" />}</Typography>
                       <TextValidator className={classes.formControl}
@@ -310,7 +310,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary">PID</Typography>
                       <TextValidator className={classes.formControl}
@@ -353,7 +353,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={12} md={6}>
+                  <Grid item xs={12} sm={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.AuxiliarySensor1" />}</Typography>
                       <Select className={classes.formControl}

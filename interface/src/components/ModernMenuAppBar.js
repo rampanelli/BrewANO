@@ -12,6 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
+import Divider from '@material-ui/core/Divider';
 
 import MenuIcon from '@material-ui/icons/Menu';
 import WifiIcon from '@material-ui/icons/Wifi';
@@ -21,48 +22,53 @@ import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
 import LocalDrink from '@material-ui/icons/LocalDrink';
 import Assignment from '@material-ui/icons/Assignment';
 import Bookmark from '@material-ui/icons/Bookmark';
-import ContactSupport from '@material-ui/icons/ContactSupport';
+import SettingsIcon from '@material-ui/icons/Settings';
+import StyleIcon from '@material-ui/icons/Style';
 
-import IntText from '../components/IntText';
+import IntText from './IntText';
 import { useLayout } from '../context/LayoutContext';
 
 const styles = theme => ({
   root: {
     width: '100%',
     minHeight: '100%',
-    backgroundColor: '#0f111a',
+    backgroundColor: '#0a0a14',
   },
   appBar: {
-    backgroundColor: '#13152a',
-    boxShadow: '0 2px 16px rgba(0,0,0,0.5)',
-    borderBottom: '1px solid rgba(124,58,237,0.15)',
+    backgroundColor: '#0c0c18',
+    boxShadow: '0 2px 20px rgba(139,92,246,0.15)',
+    borderBottom: '1px solid rgba(139,92,246,0.12)',
   },
   toolbar: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    minHeight: 48,
   },
   toolbarLeft: {
     display: 'flex',
     alignItems: 'center',
   },
   logo: {
-    height: 32,
+    height: 28,
     marginRight: theme.spacing.unit * 2,
   },
   tabs: {
     marginLeft: theme.spacing.unit * 2,
+    minHeight: 48,
   },
   tab: {
-    minWidth: 64,
+    minWidth: 56,
     fontSize: '0.75rem',
     textTransform: 'none',
     fontWeight: 500,
     opacity: 0.7,
-    color: '#c4c8d4',
+    color: '#a0a0b8',
+    minHeight: 48,
+    padding: '0 12px',
     '&.Mui-selected': {
       opacity: 1,
-      color: '#a78bfa',
+      color: '#ffffff',
       fontWeight: 700,
     },
   },
@@ -71,74 +77,62 @@ const styles = theme => ({
     alignItems: 'center',
     gap: theme.spacing.unit,
   },
-  layoutToggleBtn: {
-    color: '#a78bfa',
-    borderColor: 'rgba(167,139,250,0.4)',
-    fontSize: '0.7rem',
+  generalBtn: {
+    color: '#a0a0b8',
     textTransform: 'none',
-    padding: '2px 10px',
-    marginLeft: theme.spacing.unit,
+    fontSize: '0.75rem',
+    fontWeight: 500,
+    padding: '4px 10px',
     minWidth: 'auto',
-    borderRadius: 20,
+    borderRadius: 8,
     '&:hover': {
-      borderColor: '#a78bfa',
-      backgroundColor: 'rgba(124,58,237,0.15)',
+      color: '#ffffff',
+      backgroundColor: 'rgba(139,92,246,0.15)',
     },
   },
   content: {
-    padding: theme.spacing.unit * 3,
+    padding: theme.spacing.unit * 2,
     maxWidth: 1200,
     margin: '0 auto',
     [theme.breakpoints.down('xs')]: {
-      padding: theme.spacing.unit * 1.5,
+      padding: theme.spacing.unit,
     },
   },
   mobileMenuBtn: {
-    color: '#ffffff',
+    color: '#d0d0e0',
   },
-  mobileLogo: {
-    height: 28,
+  menuItem: {
+    fontSize: '0.85rem',
   },
 });
 
-const tabRoutes = [
+const mainRoutes = [
   { path: '/brew', label: 'Layout.MenuBrew', icon: LocalDrink },
   { path: '/brew-configuration', label: 'Layout.MenuSettings', icon: Assignment },
   { path: '/recipes', label: 'Layout.MenuRecipes', icon: Bookmark },
+];
+
+const generalRoutes = [
   { path: '/wifi-configuration', label: 'Layout.MenuWiFi', icon: WifiIcon },
+  { path: '/ap-configuration', label: 'Layout.MenuAP', icon: SettingsInputAntennaIcon },
   { path: '/ntp-configuration', label: 'Layout.MenuNTP', icon: AccessTimeIcon },
+  { path: '/ota-configuration', label: 'Layout.MenuOTA', icon: SystemUpdateIcon },
 ];
 
 function ModernMenuAppBar({ classes, children, location }) {
-  const { toggleLayout } = useLayout();
+  const { toggleLayout, modernLayout } = useLayout();
   const [mobileMenuAnchor, setMobileMenuAnchor] = React.useState(null);
+  const [generalMenuAnchor, setGeneralMenuAnchor] = React.useState(null);
 
-  const currentTab = tabRoutes.findIndex(
+  const currentTab = mainRoutes.findIndex(
     r => location.pathname === r.path || location.pathname.startsWith(r.path + '/')
   );
-
   const tabValue = currentTab >= 0 ? currentTab : 0;
-
-  const handleTabChange = (e, value) => {};
-
-  const extraRoutes = [
-    { path: '/ap-configuration', label: 'Layout.MenuAP', icon: SettingsInputAntennaIcon },
-    { path: '/ota-configuration', label: 'Layout.MenuOTA', icon: SystemUpdateIcon },
-    { path: '/about', label: 'Layout.MenuAbout', icon: ContactSupport },
-  ];
 
   const handleMobileMenuOpen = (e) => setMobileMenuAnchor(e.currentTarget);
   const handleMobileMenuClose = () => setMobileMenuAnchor(null);
-
-  const renderNavLink = (route) => (
-    <Tab
-      key={route.path}
-      component={Link}
-      to={route.path}
-      label={<IntText text={route.label} />}
-      className={classes.tab}
-    />
-  );
+  const handleGeneralMenuOpen = (e) => setGeneralMenuAnchor(e.currentTarget);
+  const handleGeneralMenuClose = () => setGeneralMenuAnchor(null);
 
   return (
     <div className={classes.root}>
@@ -154,48 +148,76 @@ function ModernMenuAppBar({ classes, children, location }) {
             <Hidden smDown>
               <Tabs
                 value={tabValue}
-                onChange={handleTabChange}
                 className={classes.tabs}
-                indicatorColor="primary"
-                TabIndicatorProps={{ style: { backgroundColor: '#7c3aed', height: 3 } }}
+                TabIndicatorProps={{ style: { backgroundColor: '#8b5cf6', height: 3 } }}
               >
-                {tabRoutes.map(renderNavLink)}
-                {extraRoutes.map(renderNavLink)}
+                {mainRoutes.map(route => (
+                  <Tab key={route.path} component={Link} to={route.path} label={<IntText text={route.label} />} className={classes.tab} />
+                ))}
               </Tabs>
             </Hidden>
           </div>
           <div className={classes.toolbarRight}>
-            <Button
-              variant="outlined"
-              size="small"
-              className={classes.layoutToggleBtn}
-              onClick={toggleLayout}
-            >
-              <IntText text="Layout.Classic" />
+            <Button className={classes.generalBtn} onClick={handleGeneralMenuOpen}>
+              <SettingsIcon style={{ fontSize: 16, marginRight: 4 }} />
+              General
             </Button>
           </div>
         </Toolbar>
       </AppBar>
+
+      {/* General menu dropdown */}
+      <Menu
+        anchorEl={generalMenuAnchor}
+        open={Boolean(generalMenuAnchor)}
+        onClose={handleGeneralMenuClose}
+        PaperProps={{ style: { backgroundColor: '#12121e', border: '1px solid rgba(139,92,246,0.15)' } }}
+      >
+        {generalRoutes.map(route => (
+          <MenuItem
+            key={route.path}
+            component={Link}
+            to={route.path}
+            onClick={handleGeneralMenuClose}
+            className={classes.menuItem}
+          >
+            <route.icon style={{ marginRight: 10, fontSize: 20, color: '#a0a0b8' }} />
+            <IntText text={route.label} />
+          </MenuItem>
+        ))}
+        <Divider style={{ backgroundColor: 'rgba(139,92,246,0.1)' }} />
+        <MenuItem onClick={() => { toggleLayout(); handleGeneralMenuClose(); }} className={classes.menuItem}>
+          <StyleIcon style={{ marginRight: 10, fontSize: 20, color: '#a0a0b8' }} />
+          {modernLayout ? <IntText text="Layout.Classic" /> : <IntText text="Layout.Modern" />}
+        </MenuItem>
+      </Menu>
+
+      {/* Mobile menu */}
       <Menu
         anchorEl={mobileMenuAnchor}
         open={Boolean(mobileMenuAnchor)}
         onClose={handleMobileMenuClose}
+        PaperProps={{ style: { backgroundColor: '#12121e', border: '1px solid rgba(139,92,246,0.15)' } }}
       >
-        {[...tabRoutes, ...extraRoutes].map(route => (
+        {[...mainRoutes, ...generalRoutes].map(route => (
           <MenuItem
             key={route.path}
             component={Link}
             to={route.path}
             onClick={handleMobileMenuClose}
+            className={classes.menuItem}
           >
-            <route.icon style={{ marginRight: 8, fontSize: 20 }} />
+            <route.icon style={{ marginRight: 10, fontSize: 20, color: '#a0a0b8' }} />
             <IntText text={route.label} />
           </MenuItem>
         ))}
-        <MenuItem onClick={() => { toggleLayout(); handleMobileMenuClose(); }}>
-          <IntText text="Layout.Classic" />
+        <Divider style={{ backgroundColor: 'rgba(139,92,246,0.1)' }} />
+        <MenuItem onClick={() => { toggleLayout(); handleMobileMenuClose(); }} className={classes.menuItem}>
+          <StyleIcon style={{ marginRight: 10, fontSize: 20, color: '#a0a0b8' }} />
+          {modernLayout ? <IntText text="Layout.Classic" /> : <IntText text="Layout.Modern" />}
         </MenuItem>
       </Menu>
+
       <main className={classes.content}>
         {children}
       </main>
