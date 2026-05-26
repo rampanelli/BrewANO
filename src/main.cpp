@@ -114,7 +114,7 @@ void AlexaCommands(EspalexaDevice* espalexaPointer) {
    if(espalexaPointer == nullptr) return;
    int AlexaPercent = espalexaPointer->getPercent();
 
-    if (espalexaPointer->getName() == "BrewUNO") { ////Alexa, desligue o brewuno.
+    if (espalexaPointer->getName() == "BrewANO") { ////Alexa, desligue o brewano.
       if (activeStatus.BrewStarted) {
         brewService.stopBrew(); }
     }
@@ -246,7 +246,7 @@ void setup()
 
   //server.begin();
 
-  //BrewUNO
+  //BrewANO
   pinMode(PUMP_BUS, OUTPUT);
   pinMode(BUZZER_BUS, OUTPUT);
   digitalWrite(BUZZER_BUS, LOW);
@@ -258,7 +258,7 @@ void setup()
   DS18B20.begin();
   // locate devices on the bus
   Serial.println("");
-  Serial.println("Hello! I'm BrewUNO =) with Alexa (═══)!");
+  Serial.println("Hello! I'm BrewANO =) with Alexa (═══)!");
   Serial.println("Locating DS18B20 devices...");
   Serial.print("Found ");
   deviceCount = DS18B20.getDeviceCount();
@@ -276,7 +276,7 @@ void setup()
   pcfWire.setClock(100000L);
   pcf8574.begin();
 
-  espalexa.addDevice("BrewUNO", AlexaCommands, EspalexaDeviceType::dimmable, 0);
+  espalexa.addDevice("BrewANO", AlexaCommands, EspalexaDeviceType::dimmable, 0);
   espalexa.addDevice("Mostura", AlexaCommands, EspalexaDeviceType::dimmable, 0);
   espalexa.addDevice("Fervura", AlexaCommands, EspalexaDeviceType::dimmable, 0);
   espalexa.addDevice("Avanço", AlexaCommands, EspalexaDeviceType::dimmable, 0);

@@ -91,7 +91,7 @@ void DisplayService::printHead()
     if (_activeStatus->BrewStarted && !_activeStatus->StepLocked)
     {
         _activeStatus->Count = GetCount(true);
-        _lcd->print(" BrewUNO   " + _activeStatus->Count);
+        _lcd->print(" BrewANO   " + _activeStatus->Count);
         _lcd->setCursor(19, 2);
         if (_activeStatus->BrewStarted && _activeStatus->ActiveStep == boil)
         _lcd->print("B");
@@ -101,14 +101,14 @@ void DisplayService::printHead()
     else if (_activeStatus->StepLocked)
     {
         _activeStatus->Count = GetCount(false);
-        //_lcd->print(" BrewUNO  " + _activeStatus->Count + "L");
-        _lcd->print(" BrewUNO   " + _activeStatus->Count);
+        //_lcd->print(" BrewANO  " + _activeStatus->Count + "L");
+        _lcd->print(" BrewANO   " + _activeStatus->Count);
         _lcd->setCursor(19, 2);
         _lcd->print("L");
     }
     else
     {
-        _lcd->print(" BrewUNO  v" + String(Version) + "  ");
+        _lcd->print(" BrewANO  v" + String(Version) + "  ");
         _lcd->setCursor(19, 2);
         if ( _activeStatus->ActiveStep != boil && _activeStatus->ActiveStep != mash)
             _lcd->print(" ");

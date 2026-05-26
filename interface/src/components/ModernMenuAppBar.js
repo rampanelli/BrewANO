@@ -150,7 +150,7 @@ function ModernMenuAppBar({ classes, children, location }) {
                 <MenuIcon />
               </IconButton>
             </Hidden>
-            <img src="/app/logo.png" alt="BrewUNO" className={classes.logo} />
+            <img src="/app/logo.png" alt="BrewANO" className={classes.logo} />
             <Hidden smDown>
               <Tabs
                 value={tabValue}
