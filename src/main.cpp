@@ -214,19 +214,17 @@ void setup()
     else
       request->send(404);
   }); */
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-      if (request->method() == HTTP_GET)
-      request->send(SPIFFS, "/www/index.html");
-    else if (request->method() == HTTP_OPTIONS)
-      request->send(200);
-    else
-      request->send(404);
-    });
   server.onNotFound([](AsyncWebServerRequest *request){
-      if (!espalexa.handleAlexaApiCall(request))
+      if (espalexa.handleAlexaApiCall(request))
       {
-        request->send(404, "text/plain", "Not found");
+        return;
       }
+      if (request->method() == HTTP_GET)
+        request->send(SPIFFS, "/www/index.html");
+      else if (request->method() == HTTP_OPTIONS)
+        request->send(200);
+      else
+        request->send(404);
     });
 
 // Disable CORS if required
