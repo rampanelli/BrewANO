@@ -12,7 +12,6 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { Grid, Paper } from '@material-ui/core';
 import IntText from '../components/IntText'
-import LayoutContext from '../context/LayoutContext'
 
 const styles = theme => ({
   root: {
@@ -427,26 +426,6 @@ class BrewSettingsForm extends Component {
                 </Grid>
 
                 <div style={{ marginTop: 20, }}>
-                  <Grid container spacing={16}>
-                    <Grid item xs={12}>
-                      <LayoutContext.Consumer>
-                        {({ modernLayout, toggleLayout }) => (
-                          <Paper className={classes.root} style={PaperStyle}>
-                            <Typography className={classes.formControl} color="textSecondary">
-                              <IntText text="Layout.Classic" /> / <IntText text="Layout.Modern" />
-                            </Typography>
-                            <div style={{ marginTop: 0, marginLeft: 20, padding: 0 }}>
-                              <Switch
-                                checked={modernLayout}
-                                onChange={toggleLayout}
-                                color="secondary"
-                              />
-                            </div>
-                          </Paper>
-                        )}
-                      </LayoutContext.Consumer>
-                    </Grid>
-                  </Grid>
                   <Button variant="raised" fullWidth color="secondary" type="submit" style={{ marginTop: 16 }}>
                     {<IntText text="Save" />}
                   </Button>

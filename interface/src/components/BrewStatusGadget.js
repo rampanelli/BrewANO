@@ -269,23 +269,19 @@ class BrewStatusGadget extends Component {
     const activeStep = this.props.ActiveStep && this.props.ActiveStep.props ? this.props.ActiveStep.props.text : '';
 
     return (
-      <Grid container spacing={8}>
-        <Grid item xs={12}>
-          <Grid container spacing={8} style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {this.renderTimer(activeStep)}
-            {this.renderModernGauge('Main', fmt(this.props.Temperature), fmt(this.props.TargetTemperature), this.props.TempUnit, '#10b981', this.props.PWM)}
-            {this.props.EnableSparge && this.renderModernGauge('Sparge', fmt(this.props.SpargeTemperature), fmt(this.props.SpargeTargetTemperature), this.props.TempUnit, '#3b82f6', this.props.SpargePWM)}
-            {this.renderModernGauge('Boil', fmt(this.props.BoilTemperature), fmt(this.props.BoilTargetTemperature), this.props.TempUnit, '#ef4444', this.props.BoilPWM)}
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <Grid container spacing={8} style={{ display: 'flex', flexWrap: 'wrap' }}>
-            {this.props.AuxOneSendorEnabled && this.renderModernAux('Aux 1', fmt(this.props.AuxOneTemperature), this.props.TempUnit)}
-            {this.props.AuxTwoSendorEnabled && this.renderModernAux('Aux 2', fmt(this.props.AuxTwoTemperature), this.props.TempUnit)}
-            {this.props.AuxThreeSendorEnabled && this.renderModernAux('Aux 3', fmt(this.props.AuxThreeTemperature), this.props.TempUnit)}
-          </Grid>
-        </Grid>
-      </Grid>
+      <div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center' }}>
+          {this.renderTimer(activeStep)}
+          {this.renderModernGauge('Main', fmt(this.props.Temperature), fmt(this.props.TargetTemperature), this.props.TempUnit, '#10b981', this.props.PWM)}
+          {this.props.EnableSparge && this.renderModernGauge('Sparge', fmt(this.props.SpargeTemperature), fmt(this.props.SpargeTargetTemperature), this.props.TempUnit, '#3b82f6', this.props.SpargePWM)}
+          {this.renderModernGauge('Boil', fmt(this.props.BoilTemperature), fmt(this.props.BoilTargetTemperature), this.props.TempUnit, '#ef4444', this.props.BoilPWM)}
+        </div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, justifyContent: 'center', marginTop: 8 }}>
+          {this.props.AuxOneSendorEnabled && this.renderModernAux('Aux 1', fmt(this.props.AuxOneTemperature), this.props.TempUnit)}
+          {this.props.AuxTwoSendorEnabled && this.renderModernAux('Aux 2', fmt(this.props.AuxTwoTemperature), this.props.TempUnit)}
+          {this.props.AuxThreeSendorEnabled && this.renderModernAux('Aux 3', fmt(this.props.AuxThreeTemperature), this.props.TempUnit)}
+        </div>
+      </div>
     )
   }
 
