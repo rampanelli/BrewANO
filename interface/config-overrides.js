@@ -1,7 +1,6 @@
 const ManifestPlugin = require('webpack-manifest-plugin');
 const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CompressionPlugin = require("compression-webpack-plugin");
 
 const path = require('path');
 const fs = require('fs');
@@ -17,13 +16,6 @@ module.exports = function override(config, env) {
     const miniCssExtractPlugin = config.plugins.find((plugin) => plugin instanceof MiniCssExtractPlugin);
     miniCssExtractPlugin.options.filename = "css/[id].[contenthash:4].css";
     miniCssExtractPlugin.options.chunkFilename = "css/[id].[contenthash:4].c.css";
-
-    config.plugins.push(new CompressionPlugin({
-      filename: "[path].gz[query]",
-      algorithm: "gzip",
-      test: /\.(js)$/,
-      deleteOriginalAssets: true
-    }));
   }
   return config;
 }

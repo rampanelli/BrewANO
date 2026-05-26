@@ -52,7 +52,7 @@ class About extends Component {
               rjwats/esp8266-react
             </Typography>
             <div className={classes.version}>
-              BrewANO v1.01B134
+              BrewANO v1.01B135
             </div>
           </CardContent>
           <CardActions>
