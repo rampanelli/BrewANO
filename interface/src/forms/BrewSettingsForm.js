@@ -17,9 +17,8 @@ const styles = theme => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
-    flexGrow: 1,
-    width: '100%',
     maxWidth: '900px',
+    margin: '0 auto',
   },
   paper: {
     padding: theme.spacing.unit * 3,

@@ -10,6 +10,9 @@ const styles = theme => ({
     padding: theme.spacing.unit * 1.5,
     margin: theme.spacing.unit * 1.5,
     minWidth: 350,
+    maxWidth: 900,
+    marginLeft: 'auto',
+    marginRight: 'auto',
   }
 
 });
