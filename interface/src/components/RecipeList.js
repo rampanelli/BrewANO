@@ -297,6 +297,22 @@ class RecipeList extends Component {
     });
   };
 
+  getFilteredAndSorted() {
+    const { recipes, search, sortBy } = this.state;
+    let filtered = recipes;
+    if (search) {
+      const s = search.toLowerCase();
+      filtered = recipes.filter(r => (r.name || '').toLowerCase().includes(s));
+    }
+    const sorted = [...filtered].sort((a, b) => {
+      if (sortBy === 'name') return (a.name || '').localeCompare(b.name || '');
+      if (sortBy === 'newest') return (b.id || 0) - (a.id || 0);
+      if (sortBy === 'oldest') return (a.id || 0) - (b.id || 0);
+      return 0;
+    });
+    return sorted;
+  }
+
   renderBeerParams(recipe) {
     const { classes } = this.props;
     const bp = recipe.beerParams || {};
