@@ -47,6 +47,7 @@
 #include <BrewUNO/Pump.h>
 #include <BrewUNO/DisplayService.h>
 #include <BrewUNO/InternationalizationService.h>
+#include <BrewUNO/RecipeService.h>
 #include <BrewUNO/KeyPadService.h>
 #include <BrewUNO/KeyButton.h>
 
@@ -87,6 +88,7 @@ BrewSettingsService brewSettingsService = BrewSettingsService(&server, &SPIFFS, 
 TemperatureService temperatureService = TemperatureService(&server, &SPIFFS, DS18B20, &brewSettingsService);
 MashSettingsService mashSettings = MashSettingsService(&server, &SPIFFS);
 BoilSettingsService boilSettingsService = BoilSettingsService(&server, &SPIFFS, &brewSettingsService);
+RecipeService recipeService = RecipeService(&server, &SPIFFS);
 
 Pump pump = Pump(&server, &activeStatus, &brewSettingsService);
 DisplayService display = DisplayService(&activeStatus, &wifiStatus, &lcd);

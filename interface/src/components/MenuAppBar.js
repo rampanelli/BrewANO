@@ -22,6 +22,7 @@ import AccessTimeIcon from '@material-ui/icons/AccessTime';
 import SettingsInputAntennaIcon from '@material-ui/icons/SettingsInputAntenna';
 import LocalDrink from '@material-ui/icons/LocalDrink'
 import Assignment from '@material-ui/icons/Assignment'
+import Bookmark from '@material-ui/icons/Bookmark'
 import ContactSupport from '@material-ui/icons/ContactSupport'
 
 import IntText from '../components/IntText'
@@ -129,6 +130,14 @@ class MenuAppBar extends React.Component {
             </ListItemIcon>
             {this.state.mobileOpen ?
               <ListItemText primary={<IntText text="BrewSettings.Settings" />} />
+              : null}
+          </ListItem>
+          <ListItem button component={Link} to='/recipes'>
+            <ListItemIcon>
+              <Bookmark />
+            </ListItemIcon>
+            {this.state.mobileOpen ?
+              <ListItemText primary={<IntText text="Recipe.Title" />} />
               : null}
           </ListItem>
           <ListItem button component={Link} to='/wifi-configuration'>

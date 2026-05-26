@@ -187,5 +187,22 @@
     "Title": "Import Recipe (BeerSmith / BrewFather)",
     "SelectFile": "Select File",
     "Apply": "Apply to Device"
+  },
+  "Recipe": {
+    "Title": "Recipes",
+    "List": "Saved Recipes",
+    "New": "New Recipe",
+    "Editor": "Edit Recipe",
+    "NoRecipes": "No saved recipes. Import from BeerSmith or BrewFather to get started.",
+    "BrewParams": "Brew Parameters",
+    "BeerParams": "Beer Parameters",
+    "BoilTime": "Boil Time (min)",
+    "BoilTemp": "Boil Temperature",
+    "Impressions": "Tasting Impressions",
+    "ImpressionsDesc": "Describe your impressions about the finished beer...",
+    "EditMashStep": "Edit Mash Step",
+    "EditBoilStep": "Edit Boil Step",
+    "AddStep": "Add Step",
+    "NoSteps": "No steps defined."
   }
 }

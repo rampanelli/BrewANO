@@ -9,6 +9,7 @@ import OTAConfiguration from './containers/OTAConfiguration';
 import APConfiguration from './containers/APConfiguration';
 import BrewConfiguration from './containers/BrewConfiguration';
 import BrewDayConfiguration from './containers/BrewDayConfiguration';
+import RecipeManagement from './containers/RecipeManagement';
 import AboutContainer from './containers/AboutContainer';
 
 class AppRouting extends Component {
@@ -21,6 +22,7 @@ class AppRouting extends Component {
 				<Route exact path="/ap-configuration" component={APConfiguration} />
 				<Route exact path="/ntp-configuration" component={NTPConfiguration} />
 				<Route exact path="/ota-configuration" component={OTAConfiguration} />
+				<Route exact path="/recipes" component={RecipeManagement} />
 				<Route exact path="/about" component={AboutContainer} />
 				<Redirect to="/brew" />
 			</Switch>

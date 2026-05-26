@@ -15,7 +15,8 @@ import { parseBeerSmithFile } from '../utils/BeerSmithImporter';
 import {
   SAVE_MASH_SETTINGS_SERVICE_PATH,
   SAVE_BOIL_SETTINGS_SERVICE_PATH,
-  BREW_SETTINGS_ENDPOINT
+  BREW_SETTINGS_ENDPOINT,
+  SAVE_RECIPE_ENDPOINT
 } from '../constants/Endpoints';
 import IntText from './IntText';
 
@@ -84,7 +85,7 @@ class BeerSmithImport extends Component {
   };
 
   saveToDevice = async () => {
-    const { recipe } = this.state;
+    const { recipe, recipeName } = this.state;
     if (!recipe) return;
 
     this.setState({ loading: true });
@@ -116,7 +117,20 @@ class BeerSmithImport extends Component {
         });
       }
 
-      this.props.enqueueSnackbar('Recipe imported successfully!', { variant: 'success' });
+      await fetch(SAVE_RECIPE_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify({
+          name: recipeName,
+          mashSteps: recipe.mashSteps,
+          boilSteps: recipe.boilSteps,
+          brewSettings: recipe.brewSettings || {},
+          beerParams: { ibu: 0, abv: 0, cor: 0, fg: 0 },
+          impressions: '',
+        }),
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      });
+
+      this.props.enqueueSnackbar('Recipe imported and saved!', { variant: 'success' });
       if (this.props.onImported) this.props.onImported();
     } catch (err) {
       this.props.enqueueSnackbar('Failed to save recipe: ' + err.message, { variant: 'error' });

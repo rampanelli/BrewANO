@@ -188,5 +188,22 @@
     "Title": "Importar Receita (BeerSmith / BrewFather)",
     "SelectFile": "Selecionar Arquivo",
     "Apply": "Aplicar ao Dispositivo"
+  },
+  "Recipe": {
+    "Title": "Receitas",
+    "List": "Receitas Salvas",
+    "New": "Nova Receita",
+    "Editor": "Editar Receita",
+    "NoRecipes": "Nenhuma receita salva. Importe do BeerSmith ou BrewFather para começar.",
+    "BrewParams": "Parâmetros de Brassagem",
+    "BeerParams": "Parâmetros da Cerveja",
+    "BoilTime": "Tempo de Fervura (min)",
+    "BoilTemp": "Temperatura de Fervura",
+    "Impressions": "Impressões de Degustação",
+    "ImpressionsDesc": "Descreva suas impressões sobre a cerveja pronta...",
+    "EditMashStep": "Editar Etapa de Mostura",
+    "EditBoilStep": "Editar Etapa de Fervura",
+    "AddStep": "Adicionar Etapa",
+    "NoSteps": "Nenhuma etapa definida."
   }
 }
