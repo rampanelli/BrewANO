@@ -276,7 +276,7 @@ void setup()
   espalexa.addDevice("Resumo", AlexaCommands, EspalexaDeviceType::dimmable, 0);
   espalexa.addDevice("P W M", AlexaCommands, EspalexaDeviceType::dimmable, 0);
   espalexa.begin(&server);
-  
+  server.begin();
 }
 
 void loop()
