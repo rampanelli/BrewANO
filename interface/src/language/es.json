@@ -239,6 +239,14 @@
     "Classic": "Vista Clásica",
     "Modern": "Vista Moderna",
     "SwitchToClassic": "Cambiar a Diseño Clásico",
-    "SwitchToModern": "Cambiar a Diseño Moderno"
+    "SwitchToModern": "Cambiar a Diseño Moderno",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Ajustes",
+    "MenuRecipes": "Recetas",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Info"
   }
 }

@@ -102,11 +102,11 @@ const styles = theme => ({
 });
 
 const tabRoutes = [
-  { path: '/brew', label: 'Brew.Title', icon: LocalDrink },
-  { path: '/brew-configuration', label: 'BrewSettings.Settings', icon: Assignment },
-  { path: '/recipes', label: 'Recipe.Title', icon: Bookmark },
-  { path: '/wifi-configuration', label: 'WiFiSettings.Settings', icon: WifiIcon },
-  { path: '/ntp-configuration', label: 'NTPSettings.Settings', icon: AccessTimeIcon },
+  { path: '/brew', label: 'Layout.MenuBrew', icon: LocalDrink },
+  { path: '/brew-configuration', label: 'Layout.MenuSettings', icon: Assignment },
+  { path: '/recipes', label: 'Layout.MenuRecipes', icon: Bookmark },
+  { path: '/wifi-configuration', label: 'Layout.MenuWiFi', icon: WifiIcon },
+  { path: '/ntp-configuration', label: 'Layout.MenuNTP', icon: AccessTimeIcon },
 ];
 
 function ModernMenuAppBar({ classes, children, location }) {
@@ -122,9 +122,9 @@ function ModernMenuAppBar({ classes, children, location }) {
   const handleTabChange = (e, value) => {};
 
   const extraRoutes = [
-    { path: '/ap-configuration', label: 'APSettings.Settings', icon: SettingsInputAntennaIcon },
-    { path: '/ota-configuration', label: 'OTASettings.Settings', icon: SystemUpdateIcon },
-    { path: '/about', label: 'About', icon: ContactSupport },
+    { path: '/ap-configuration', label: 'Layout.MenuAP', icon: SettingsInputAntennaIcon },
+    { path: '/ota-configuration', label: 'Layout.MenuOTA', icon: SystemUpdateIcon },
+    { path: '/about', label: 'Layout.MenuAbout', icon: ContactSupport },
   ];
 
   const handleMobileMenuOpen = (e) => setMobileMenuAnchor(e.currentTarget);

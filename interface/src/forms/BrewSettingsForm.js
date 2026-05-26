@@ -64,9 +64,9 @@ class BrewSettingsForm extends Component {
                   onSubmit()
                 }} ref="BrewSettingsForm" className={classes.root}>
                 <IntText ref={this.child} />
-                <Grid container spacing={16}>
+                <Grid container spacing={16} justify="center">
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="Language" /></Typography>
                       <Select className={classes.formControl}
@@ -104,7 +104,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="MainSensor" /></Typography>
                       <Select className={classes.formControl}
@@ -130,7 +130,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="BrewSettings.MashBoilPWM" /></Typography>
                       <TextValidator className={classes.formControl}
@@ -179,7 +179,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="SpargeSensor" /></Typography>
                       <div style={{ marginTop: 0, marginLeft: 20, padding: 0 }}>
@@ -241,7 +241,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="BoilSensor" /></Typography>
                       <div style={{ marginTop: 0, marginLeft: 20, padding: 0 }}>
@@ -282,7 +282,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.Pump" />}</Typography>
                       <TextValidator className={classes.formControl}
@@ -310,7 +310,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary">PID</Typography>
                       <TextValidator className={classes.formControl}
@@ -353,7 +353,7 @@ class BrewSettingsForm extends Component {
                     </Paper>
                   </Grid>
 
-                  <Grid item xs={6}>
+                  <Grid item xs={12} md={6}>
                     <Paper className={classes.root} style={PaperStyle}>
                       <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.AuxiliarySensor1" />}</Typography>
                       <Select className={classes.formControl}
@@ -436,19 +436,10 @@ class BrewSettingsForm extends Component {
                               <IntText text="Layout.Classic" /> / <IntText text="Layout.Modern" />
                             </Typography>
                             <div style={{ marginTop: 0, marginLeft: 20, padding: 0 }}>
-                              <FormControlLabel
-                                control={
-                                  <Switch
-                                    checked={modernLayout}
-                                    onChange={toggleLayout}
-                                    color="secondary"
-                                  />
-                                }
-                                label={
-                                  <Typography variant="body2">
-                                    {modernLayout ? <IntText text="Layout.SwitchToClassic" /> : <IntText text="Layout.SwitchToModern" />}
-                                  </Typography>
-                                }
+                              <Switch
+                                checked={modernLayout}
+                                onChange={toggleLayout}
+                                color="secondary"
                               />
                             </div>
                           </Paper>

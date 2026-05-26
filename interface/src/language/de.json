@@ -239,6 +239,14 @@
     "Classic": "Klassische Ansicht",
     "Modern": "Moderne Ansicht",
     "SwitchToClassic": "Zum klassischen Layout wechseln",
-    "SwitchToModern": "Zum modernen Layout wechseln"
+    "SwitchToModern": "Zum modernen Layout wechseln",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Einstell",
+    "MenuRecipes": "Rezepte",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Info"
   }
 }

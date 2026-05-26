@@ -239,6 +239,14 @@
     "Classic": "Widok Klasyczny",
     "Modern": "Widok Nowoczesny",
     "SwitchToClassic": "Przełącz na Układ Klasyczny",
-    "SwitchToModern": "Przełącz na Układ Nowoczesny"
+    "SwitchToModern": "Przełącz na Układ Nowoczesny",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Ustaw",
+    "MenuRecipes": "Przepisy",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Info"
   }
 }

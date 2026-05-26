@@ -239,6 +239,14 @@
     "Classic": "Klassieke Weergave",
     "Modern": "Moderne Weergave",
     "SwitchToClassic": "Wissel naar Klassieke Layout",
-    "SwitchToModern": "Wissel naar Moderne Layout"
+    "SwitchToModern": "Wissel naar Moderne Layout",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Instel",
+    "MenuRecipes": "Recepten",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Info"
   }
 }

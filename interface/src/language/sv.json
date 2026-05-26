@@ -239,6 +239,14 @@
     "Classic": "Klassisk Vy",
     "Modern": "Modern Vy",
     "SwitchToClassic": "Byt till Klassisk Layout",
-    "SwitchToModern": "Byt till Modern Layout"
+    "SwitchToModern": "Byt till Modern Layout",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Inställ",
+    "MenuRecipes": "Recept",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Om"
   }
 }

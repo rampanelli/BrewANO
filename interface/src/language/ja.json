@@ -239,6 +239,14 @@
     "Classic": "クラシック表示",
     "Modern": "モダン表示",
     "SwitchToClassic": "クラシックレイアウトに切り替え",
-    "SwitchToModern": "モダンレイアウトに切り替え"
+    "SwitchToModern": "モダンレイアウトに切り替え",
+    "MenuBrew": "Brew",
+    "MenuSettings": "設定",
+    "MenuRecipes": "レシピ",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "情報"
   }
 }

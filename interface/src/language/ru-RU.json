@@ -239,6 +239,14 @@
     "Classic": "Классический Вид",
     "Modern": "Современный Вид",
     "SwitchToClassic": "Переключить на Классический Макет",
-    "SwitchToModern": "Переключить на Современный Макет"
+    "SwitchToModern": "Переключить на Современный Макет",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Настр",
+    "MenuRecipes": "Рецепты",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Инфо"
   }
 }

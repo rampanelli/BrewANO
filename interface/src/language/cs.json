@@ -239,6 +239,14 @@
     "Classic": "Klasické Zobrazení",
     "Modern": "Moderní Zobrazení",
     "SwitchToClassic": "Přepnout na Klasické Rozložení",
-    "SwitchToModern": "Přepnout na Moderní Rozložení"
+    "SwitchToModern": "Přepnout na Moderní Rozložení",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Nastav",
+    "MenuRecipes": "Recepty",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Info"
   }
 }

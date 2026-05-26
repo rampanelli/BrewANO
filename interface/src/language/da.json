@@ -239,6 +239,14 @@
     "Classic": "Klassisk Visning",
     "Modern": "Moderne Visning",
     "SwitchToClassic": "Skift til Klassisk Layout",
-    "SwitchToModern": "Skift til Moderne Layout"
+    "SwitchToModern": "Skift til Moderne Layout",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Indstil",
+    "MenuRecipes": "Opskrift",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Om"
   }
 }

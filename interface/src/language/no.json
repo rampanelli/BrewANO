@@ -239,6 +239,14 @@
     "Classic": "Klassisk Visning",
     "Modern": "Moderne Visning",
     "SwitchToClassic": "Bytt til Klassisk Oppsett",
-    "SwitchToModern": "Bytt til Moderne Oppsett"
+    "SwitchToModern": "Bytt til Moderne Oppsett",
+    "MenuBrew": "Brew",
+    "MenuSettings": "Innst",
+    "MenuRecipes": "Oppskr",
+    "MenuWiFi": "WiFi",
+    "MenuAP": "AP",
+    "MenuNTP": "NTP",
+    "MenuOTA": "OTA",
+    "MenuAbout": "Om"
   }
 }

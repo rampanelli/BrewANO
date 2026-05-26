@@ -10,27 +10,14 @@ import { withStyles } from '@material-ui/core/styles';
 import IntText from '../components/IntText'
 
 const styles = theme => ({
-  card: {
-    minWidth: 275,
-  },
-  bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
-  },
-  pos: {
-    marginBottom: 12,
-  },
-  pos2x: {
-    marginBottom: 20,
-  },
+  card: { minWidth: 275 },
+  bullet: { display: 'inline-block', margin: '0 2px', transform: 'scale(0.8)' },
+  pos: { marginBottom: 12 },
+  pos2x: { marginBottom: 20 },
+  version: { fontFamily: 'monospace', fontSize: '0.8rem', color: theme.palette.text.secondary, marginTop: 16 },
 });
 
 class About extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   render() {
     const { classes } = this.props;
     return (
@@ -64,6 +51,9 @@ class About extends Component {
             <Typography className={classes.pos} variant="h8" color="textSecondary">
               rjwats/esp8266-react
             </Typography>
+            <div className={classes.version}>
+              BrewUNO v1.0.L6R8-iaBrew-1.02
+            </div>
           </CardContent>
           <CardActions>
             <Button variant="contained" color="secondary" className={classes.button} size="small" target="_blank" href="https://github.com/uncodead/BrewUNO">Github</Button>
