@@ -216,9 +216,13 @@ class App extends Component {
       modernLayout: true,
     };
     this.child = React.createRef();
-    ExecuteRestCall(BREW_SETTINGS_ENDPOINT, 'GET', json => {
-      this.child.current.SetText(json.language)
-    });
+    try {
+      ExecuteRestCall(BREW_SETTINGS_ENDPOINT, 'GET', json => {
+        if (json && json.language) {
+          this.child.current.SetText(json.language)
+        }
+      });
+    } catch (e) {}
   }
 
   componentDidMount() {
