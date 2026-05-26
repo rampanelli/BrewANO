@@ -51,17 +51,8 @@
 | Versão | Descrição |
 |--------|-----------|
 | 1.01B137 | Gzip JS + partição padrão, 660KB SPIFFS |
-| 1.01B136 | Remoção de ldscript para compatibilidade mkspiffs |
 | 1.01B135 | JS sem compressão para compatibilidade mobile universal |
 | 1.01B134 | Importação sequencial com async/await e tratamento de erro |
-| 1.01B133 | Correção: restaurado método getFilteredAndSorted |
-| 1.01B132 | Remoção de ldscript customizado, layout SPIFFS padrão |
 | 1.01B131 | Reativação do gzip + partição 2MB SPIFFS |
 | 1.01B130 | Importação multi-arquivo na aba Recipes |
-| 1.01B129 | Restauração do botão de importação no BrewConfiguration |
 | 1.01B128 | Remoção de gzip para compatibilidade iOS Safari |
-| 1.01B127 | AGENTS.md com referência de dimensões de ícones |
-| 1.01B126 | Reversão de ícones para os originais |
-| 1.01B125 | Novos ícones (deprecated) |
-| 1.01B124 | Correção de idiomas: JSON sem compressão no SPIFFS |
-| 1.01B123 | Rebrand BrewUNO → BrewANO |
