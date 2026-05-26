@@ -221,7 +221,7 @@ class RecipeList extends Component {
   };
 
   handleImportFile = (e) => {
-    const files = Array.from(e.target.files);
+    const files = [].slice.call(e.target.files);
     if (!files.length) return;
     this.setState({ importRecipes: [] });
 
@@ -234,8 +234,10 @@ class RecipeList extends Component {
         loaded++;
         try {
           const result = parseBeerSmithFile(event.target.result, file.name);
+          var baseName = file.name.replace(/\.(bsmx|xml|json)$/i, '');
+          if (!baseName || baseName === file.name) baseName = file.name;
           recipes.push({
-            name: file.name.replace(/\.(bsmx|xml|json)$/i, ''),
+            name: baseName,
             mashSteps: result.mashSteps || [],
             boilSteps: result.boilSteps || [],
             brewSettings: result.brewSettings || {},
@@ -245,7 +247,7 @@ class RecipeList extends Component {
         }
         if (loaded === files.length) {
           if (recipes.length === 0) {
-            this.props.enqueueSnackbar('No valid recipes found in selected files.', { variant: 'warning' });
+            this.props.enqueueSnackbar('No valid recipes found.', { variant: 'warning' });
           }
           this.setState({ importRecipes: recipes });
         }
@@ -255,17 +257,19 @@ class RecipeList extends Component {
     e.target.value = '';
   };
 
-  handleImportSave = () => {
+  handleImportSave = async () => {
     const { importRecipes } = this.state;
     if (!importRecipes.length) return;
 
     this.setState({ importSaving: true });
     var saved = 0;
+    var failed = 0;
     var total = importRecipes.length;
 
-    importRecipes.forEach(recipe => {
-      const body = {
-        name: recipe.name,
+    for (var i = 0; i < importRecipes.length; i++) {
+      var recipe = importRecipes[i];
+      var body = {
+        name: recipe.name || ('Recipe ' + (i + 1)),
         mashSteps: recipe.mashSteps,
         boilSteps: recipe.boilSteps,
         brewSettings: recipe.brewSettings || {},
@@ -273,28 +277,33 @@ class RecipeList extends Component {
         impressions: '',
       };
 
-      fetch(SAVE_RECIPE_ENDPOINT, {
-        method: 'POST',
-        body: JSON.stringify(body),
-        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-      })
-        .then(response => {
-          saved++;
-          if (response.ok) {
-            if (saved === total) {
-              this.props.enqueueSnackbar(total + ' recipe(s) imported!', { variant: 'success' });
-              this.handleImportClose();
-              this.loadRecipes();
-              this.setState({ importSaving: false });
-            }
-          } else {
-            if (saved === total) {
-              this.props.enqueueSnackbar('Some recipes failed to save.', { variant: 'error' });
-              this.setState({ importSaving: false });
-            }
-          }
+      try {
+        var response = await fetch(SAVE_RECIPE_ENDPOINT, {
+          method: 'POST',
+          body: JSON.stringify(body),
+          headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
         });
-    });
+        if (response.ok) {
+          saved++;
+        } else {
+          failed++;
+        }
+      } catch (err) {
+        failed++;
+      }
+    }
+
+    if (saved === total) {
+      this.props.enqueueSnackbar(saved + ' recipe(s) imported!', { variant: 'success' });
+    } else if (saved > 0) {
+      this.props.enqueueSnackbar(saved + ' saved, ' + failed + ' failed.', { variant: 'warning' });
+    } else {
+      this.props.enqueueSnackbar('Failed to import recipes. Check device connection.', { variant: 'error' });
+    }
+
+    this.handleImportClose();
+    this.loadRecipes();
+    this.setState({ importSaving: false });
   };
 
   getFilteredAndSorted() {
