@@ -204,6 +204,7 @@ void setup()
   server.serveStatic("/css/", SPIFFS, "/www/css/");
   server.serveStatic("/fonts/", SPIFFS, "/www/fonts/");
   server.serveStatic("/app/", SPIFFS, "/www/app/");
+  server.serveStatic("/lang/", SPIFFS, "/lang/");
   server.serveStatic("/favicon.ico", SPIFFS, "/www/favicon.ico");
 
   // Serving all other get requests with "/www/index.htm"
