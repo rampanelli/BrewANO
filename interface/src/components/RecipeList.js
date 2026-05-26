@@ -115,8 +115,8 @@ class RecipeList extends Component {
     this.state = {
       recipes: [],
       importOpen: false,
-      importName: '',
-      importRecipe: null,
+      importRecipes: [],
+      importSaving: false,
       search: '',
       sortBy: 'newest',
     };
@@ -213,86 +213,89 @@ class RecipeList extends Component {
   };
 
   handleImportOpen = () => {
-    this.setState({ importOpen: true, importName: '', importRecipe: null });
-    if (this.props.onImport) this.props.onImport(true);
+    this.setState({ importOpen: true, importRecipes: [] });
   };
 
   handleImportClose = () => {
-    this.setState({ importOpen: false });
-    if (this.props.onImport) this.props.onImport(false);
+    this.setState({ importOpen: false, importRecipes: [] });
   };
 
   handleImportFile = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (event) => {
-      try {
-        const result = parseBeerSmithFile(event.target.result, file.name);
-        if (!result.mashSteps.length && !result.boilSteps.length) {
-          this.props.enqueueSnackbar('No mash steps or hop additions found.', { variant: 'warning' });
-          return;
+    const files = Array.from(e.target.files);
+    if (!files.length) return;
+    this.setState({ importRecipes: [] });
+
+    var loaded = 0;
+    const recipes = [];
+
+    files.forEach(file => {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        loaded++;
+        try {
+          const result = parseBeerSmithFile(event.target.result, file.name);
+          recipes.push({
+            name: file.name.replace(/\.(bsmx|xml|json)$/i, ''),
+            mashSteps: result.mashSteps || [],
+            boilSteps: result.boilSteps || [],
+            brewSettings: result.brewSettings || {},
+          });
+        } catch (err) {
+          this.props.enqueueSnackbar('Failed to parse: ' + file.name, { variant: 'error' });
         }
-        this.setState({
-          importRecipe: result,
-          importName: file.name.replace(/\.(bsmx|xml|json)$/i, ''),
-        });
-      } catch (err) {
-        this.props.enqueueSnackbar(err.message || 'Failed to parse file.', { variant: 'error' });
-      }
-    };
-    reader.readAsText(file);
+        if (loaded === files.length) {
+          if (recipes.length === 0) {
+            this.props.enqueueSnackbar('No valid recipes found in selected files.', { variant: 'warning' });
+          }
+          this.setState({ importRecipes: recipes });
+        }
+      };
+      reader.readAsText(file);
+    });
     e.target.value = '';
   };
 
   handleImportSave = () => {
-    const { importRecipe, importName } = this.state;
-    if (!importRecipe) return;
+    const { importRecipes } = this.state;
+    if (!importRecipes.length) return;
 
-    const body = {
-      name: importName,
-      mashSteps: importRecipe.mashSteps,
-      boilSteps: importRecipe.boilSteps,
-      brewSettings: importRecipe.brewSettings || {},
-      beerParams: { ibu: 0, abv: 0, cor: 0, fg: 0 },
-      impressions: '',
-    };
+    this.setState({ importSaving: true });
+    var saved = 0;
+    var total = importRecipes.length;
 
-    fetch(SAVE_RECIPE_ENDPOINT, {
-      method: 'POST',
-      body: JSON.stringify(body),
-      headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-    })
-      .then(response => {
-        if (response.ok) {
-          this.props.enqueueSnackbar('Recipe imported!', { variant: 'success' });
-          this.handleImportClose();
-          this.loadRecipes();
-        } else {
-          this.props.enqueueSnackbar('Failed to save recipe.', { variant: 'error' });
-        }
-      });
-  };
+    importRecipes.forEach(recipe => {
+      const body = {
+        name: recipe.name,
+        mashSteps: recipe.mashSteps,
+        boilSteps: recipe.boilSteps,
+        brewSettings: recipe.brewSettings || {},
+        beerParams: { ibu: 0, abv: 0, cor: 0, fg: 0 },
+        impressions: '',
+      };
 
-  handleSortChange = (sortBy) => {
-    this.setState({ sortBy });
-  };
-
-  getFilteredAndSorted() {
-    const { recipes, search, sortBy } = this.state;
-    let filtered = recipes;
-    if (search) {
-      const s = search.toLowerCase();
-      filtered = recipes.filter(r => (r.name || '').toLowerCase().includes(s));
-    }
-    const sorted = [...filtered].sort((a, b) => {
-      if (sortBy === 'name') return (a.name || '').localeCompare(b.name || '');
-      if (sortBy === 'newest') return (b.id || 0) - (a.id || 0);
-      if (sortBy === 'oldest') return (a.id || 0) - (b.id || 0);
-      return 0;
+      fetch(SAVE_RECIPE_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      })
+        .then(response => {
+          saved++;
+          if (response.ok) {
+            if (saved === total) {
+              this.props.enqueueSnackbar(total + ' recipe(s) imported!', { variant: 'success' });
+              this.handleImportClose();
+              this.loadRecipes();
+              this.setState({ importSaving: false });
+            }
+          } else {
+            if (saved === total) {
+              this.props.enqueueSnackbar('Some recipes failed to save.', { variant: 'error' });
+              this.setState({ importSaving: false });
+            }
+          }
+        });
     });
-    return sorted;
-  }
+  };
 
   renderBeerParams(recipe) {
     const { classes } = this.props;
@@ -311,7 +314,7 @@ class RecipeList extends Component {
 
   render() {
     const { classes } = this.props;
-    const { importOpen, importName, importRecipe, search, sortBy } = this.state;
+    const { importOpen, importRecipes, importSaving, search, sortBy } = this.state;
     const filtered = this.getFilteredAndSorted();
 
     return (
@@ -370,6 +373,7 @@ class RecipeList extends Component {
                   style={{ display: 'none' }}
                   id="recipe-import-file"
                   type="file"
+                  multiple
                   onChange={this.handleImportFile}
                 />
                 <Button
@@ -450,25 +454,36 @@ class RecipeList extends Component {
                     </Button>
                   </label>
                 </div>
-                {importRecipe ? (
+                {importRecipes.length > 0 ? (
                   <div>
-                    <TextField
-                      label={<IntText text="Name" />}
-                      value={importName}
-                      onChange={e => this.setState({ importName: e.target.value })}
-                      fullWidth
-                      margin="normal"
-                    />
-                    <Typography variant="subtitle2" style={{ marginTop: 8 }}>
-                      {importRecipe.mashSteps.length} mash steps, {importRecipe.boilSteps.length} hop additions
+                    <Typography variant="subtitle2" style={{ marginBottom: 8 }}>
+                      {importRecipes.length} file(s) parsed successfully
                     </Typography>
+                    {importRecipes.map((r, i) => (
+                      <div key={i} style={{ marginBottom: 12 }}>
+                        <TextField
+                          label={<IntText text="Name" />}
+                          value={r.name}
+                          onChange={e => {
+                            const updated = [...importRecipes];
+                            updated[i].name = e.target.value;
+                            this.setState({ importRecipes: updated });
+                          }}
+                          fullWidth
+                          margin="dense"
+                        />
+                        <Typography variant="caption" color="textSecondary">
+                          {r.mashSteps.length} mash steps, {r.boilSteps.length} hop additions
+                        </Typography>
+                      </div>
+                    ))}
                   </div>
                 ) : null}
               </DialogContent>
               <DialogActions>
                 <Button onClick={this.handleImportClose}><IntText text="Cancel" /></Button>
-                <Button onClick={this.handleImportSave} variant="contained" color="primary" disabled={!importRecipe}>
-                  <IntText text="Import.Apply" />
+                <Button onClick={this.handleImportSave} variant="contained" color="primary" disabled={!importRecipes.length || importSaving}>
+                  <IntText text="Import.Apply" /> ({importRecipes.length})
                 </Button>
               </DialogActions>
             </Dialog>
