@@ -187,8 +187,15 @@ void setup()
 #endif
 
   Serial.begin(SERIAL_BAUD_RATE);
-  SPIFFS.begin();
-  //SPIFFS.format();
+  if (!SPIFFS.begin()) {
+    Serial.println("SPIFFS mount failed, formatting...");
+    SPIFFS.format();
+    if (!SPIFFS.begin()) {
+      Serial.println("SPIFFS format failed!");
+    } else {
+      Serial.println("SPIFFS formatted successfully.");
+    }
+  }
 
   // Start security settings service first
   securitySettingsService.begin();
