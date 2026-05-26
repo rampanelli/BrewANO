@@ -290,7 +290,7 @@ class Brew extends Component {
               AuxTwoTemperature={this.state.status.auxtwo_temperature}
               AuxThreeTemperature={this.state.status.auxthree_temperature}
               SpargeTargetTemperature={this.state.status.sparge_target_temperature > 0 ? this.state.status.sparge_target_temperature : ''}
-              EnableSparge={this.state.status.enable_sparge}
+              EnableSparge={!!this.state.status.enable_sparge}
               EnableBoilKettle={this.state.status.enable_boilkettle === 1}
               TempUnit={this.state.status.temp_unit}
             />
