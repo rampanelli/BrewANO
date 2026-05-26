@@ -13,9 +13,10 @@ function fetchLang(code) {
   return fetch("/lang/" + code + ".json.gz")
     .then(r => {
       if (!r.ok) throw new Error("lang not found");
-      return r.json();
+      return r.text();
     })
-    .then(data => {
+    .then(text => {
+      var data = JSON.parse(text);
       langCache[code] = data;
       return data;
     })
