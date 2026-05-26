@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import Brew from './Brew'
 import { PageView, initGA, Event } from '../components/Tracking'
 
@@ -15,9 +15,9 @@ class BrewConfiguration extends Component {
 
   render() {
     return (
-      <MenuAppBar sectionTitle="Brew">
+      <AppLayout sectionTitle="Brew">
         <Brew />
-      </MenuAppBar>
+      </AppLayout>
     )
   }
 }

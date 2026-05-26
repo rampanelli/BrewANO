@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import About from './About'
 import { PageView, initGA, Event } from '../components/Tracking'
 import IntText from '../components/IntText'
@@ -17,9 +17,9 @@ class AboutContainer extends Component {
   render() {
     const { data, fetched, errorMessage } = this.props;
     return (
-      <MenuAppBar sectionTitle={<IntText text="About" />}>
+      <AppLayout sectionTitle={<IntText text="About" />}>
         <About />
-      </MenuAppBar>
+      </AppLayout>
     )
   }
 }

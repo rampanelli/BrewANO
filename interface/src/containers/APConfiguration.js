@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import APSettings from './APSettings';
 import APStatus from './APStatus';
 import { PageView, initGA, Event } from '../components/Tracking'
@@ -28,14 +28,14 @@ class APConfiguration extends Component {
   render() {
     const { selectedTab } = this.state;
     return (
-      <MenuAppBar sectionTitle="AP Configuration">
+      <AppLayout sectionTitle="AP Configuration">
         <Tabs value={selectedTab} onChange={this.handleTabChange} indicatorColor="secondary" textColor="contrastText" fullWidth scrollable>
            <Tab value="apStatus" label="AP Status" />
            <Tab value="apSettings" label="AP Settings" />
          </Tabs>
          {selectedTab === "apStatus" && <APStatus fullDetails={true} />}
          {selectedTab === "apSettings" && <APSettings />}
-      </MenuAppBar>
+      </AppLayout>
     )
   }
 }

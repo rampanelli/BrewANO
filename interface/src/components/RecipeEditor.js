@@ -7,28 +7,32 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActions from '@material-ui/core/CardActions';
 import IconButton from '@material-ui/core/IconButton';
+import Chip from '@material-ui/core/Chip';
 import DeleteIcon from '@material-ui/icons/Delete';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
+import GetAppIcon from '@material-ui/icons/GetApp';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogActions from '@material-ui/core/DialogActions';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Tooltip from '@material-ui/core/Tooltip';
 import { GET_RECIPE_ENDPOINT, SAVE_RECIPE_ENDPOINT } from '../constants/Endpoints';
 import { ExecuteRestCall } from '../components/Utils';
 import IntText from '../components/IntText';
+import LayoutContext from '../context/LayoutContext';
 
 const styles = theme => ({
   root: {
     padding: theme.spacing.unit * 2,
+    maxWidth: 900,
+    margin: '0 auto',
   },
   section: {
     padding: theme.spacing.unit * 2,
@@ -43,6 +47,54 @@ const styles = theme => ({
   actions: {
     marginTop: theme.spacing.unit * 2,
     textAlign: 'right',
+    display: 'flex',
+    justifyContent: 'flex-end',
+    gap: theme.spacing.unit,
+  },
+  stepCard: {
+    marginBottom: theme.spacing.unit,
+    position: 'relative',
+  },
+  stepCardContent: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    padding: '12px 16px',
+    '&:last-child': {
+      paddingBottom: 12,
+    },
+  },
+  stepInfo: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing.unit * 2,
+    flexWrap: 'wrap',
+    flex: 1,
+  },
+  stepName: {
+    fontWeight: 600,
+    minWidth: 120,
+  },
+  stepChip: {
+    height: 24,
+    fontSize: '0.65rem',
+  },
+  stepParams: {
+    display: 'flex',
+    gap: 8,
+    flexWrap: 'wrap',
+  },
+  emptySteps: {
+    padding: theme.spacing.unit * 3,
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+    border: '2px dashed',
+    borderColor: theme.palette.type === 'dark' ? '#555' : '#ddd',
+    borderRadius: 8,
+  },
+  paramGrid: {
+    marginTop: theme.spacing.unit,
   },
 });
 
@@ -124,6 +176,27 @@ class RecipeEditor extends Component {
       });
   };
 
+  handleExport = () => {
+    const { name, mashSteps, boilSteps, brewSettings, beerParams, impressions } = this.state;
+    const exportData = {
+      name,
+      mashSteps,
+      boilSteps,
+      brewSettings,
+      beerParams,
+      impressions,
+      exportedAt: new Date().toISOString(),
+    };
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = (name || 'recipe') + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+    this.props.enqueueSnackbar('Recipe exported!', { variant: 'success' });
+  };
+
   handleChange = (field) => (e) => {
     this.setState({ [field]: e.target.value });
   };
@@ -172,13 +245,6 @@ class RecipeEditor extends Component {
     this.setState({ [key]: items });
   };
 
-  handleStepEditChange = (field) => (e) => {
-    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
-    this.setState(prev => ({
-      stepDialogEdit: { ...prev.stepDialogEdit, [field]: value }
-    }));
-  };
-
   renderStepDialog() {
     const { stepDialogOpen, stepDialogType, stepDialogEdit } = this.state;
     const isMash = stepDialogType === 'mash';
@@ -193,14 +259,14 @@ class RecipeEditor extends Component {
           <TextField
             label={<IntText text="Name" />}
             value={edit.n || ''}
-            onChange={this.handleStepEditChange('n')}
+            onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, n: e.target.value } }))}
             fullWidth
             margin="normal"
           />
           {isMash ? (
             <>
               <TextField
-                label={<IntText text="Temperature" />}
+                label={<IntText text="Temperature" /> + ' (°C)'}
                 type="number"
                 value={edit.t || 0}
                 onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, t: parseFloat(e.target.value) || 0 } }))}
@@ -215,22 +281,32 @@ class RecipeEditor extends Component {
                 fullWidth
                 margin="normal"
               />
-              <FormControlLabel
-                control={<Switch checked={edit.r} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, r: e.target.checked } }))} />}
-                label={<IntText text="Recirculation" />}
-              />
-              <FormControlLabel
-                control={<Switch checked={edit.sl} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, sl: e.target.checked } }))} />}
-                label={<IntText text="StepLockON" />}
-              />
-              <FormControlLabel
-                control={<Switch checked={edit.ho} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, ho: e.target.checked } }))} />}
-                label={<IntText text="Heater" />}
-              />
-              <FormControlLabel
-                control={<Switch checked={edit.fp} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, fp: e.target.checked } }))} />}
-                label={<IntText text="FullPower" />}
-              />
+              <Grid container spacing={8} style={{ marginTop: 8 }}>
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    control={<Switch checked={edit.r} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, r: e.target.checked } }))} />}
+                    label={<Typography variant="body2"><IntText text="Recipe.Recirculation" /></Typography>}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    control={<Switch checked={edit.sl} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, sl: e.target.checked } }))} />}
+                    label={<Typography variant="body2"><IntText text="Recipe.StepLock" /></Typography>}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    control={<Switch checked={edit.ho} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, ho: e.target.checked } }))} />}
+                    label={<Typography variant="body2"><IntText text="Recipe.Heater" /></Typography>}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    control={<Switch checked={edit.fp} onChange={e => this.setState(prev => ({ stepDialogEdit: { ...prev.stepDialogEdit, fp: e.target.checked } }))} />}
+                    label={<Typography variant="body2"><IntText text="Recipe.FullPower" /></Typography>}
+                  />
+                </Grid>
+              </Grid>
             </>
           ) : (
             <>
@@ -261,176 +337,237 @@ class RecipeEditor extends Component {
     );
   }
 
+  renderMashStepCard(step, i) {
+    const { classes } = this.props;
+    return (
+      <Card className={classes.stepCard} key={'mash-' + i}>
+        <CardContent className={classes.stepCardContent}>
+          <div className={classes.stepInfo}>
+            <Typography className={classes.stepName}>
+              {step.n || 'Step ' + (i + 1)}
+            </Typography>
+            <div className={classes.stepParams}>
+              <Chip label={step.t + '°C'} size="small" className={classes.stepChip} />
+              <Chip label={step.tm + ' min'} size="small" className={classes.stepChip} />
+              {step.r && <Chip label="Pump" size="small" className={classes.stepChip} />}
+              {step.ho && <Chip label="Heat" size="small" className={classes.stepChip} />}
+              {step.sl && <Chip label="Lock" size="small" className={classes.stepChip} color="secondary" />}
+              {step.fp && <Chip label="Full" size="small" className={classes.stepChip} color="primary" />}
+            </div>
+          </div>
+          <div>
+            <IconButton size="small" onClick={() => this.openStepDialog('mash', step, i)}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton size="small" onClick={() => this.deleteStep('mash', i)}>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  renderBoilStepCard(step, i) {
+    const { classes } = this.props;
+    return (
+      <Card className={classes.stepCard} key={'boil-' + i}>
+        <CardContent className={classes.stepCardContent}>
+          <div className={classes.stepInfo}>
+            <Typography className={classes.stepName}>
+              {step.n || 'Addition ' + (i + 1)}
+            </Typography>
+            <div className={classes.stepParams}>
+              <Chip label={step.tm + ' min'} size="small" className={classes.stepChip} />
+              {step.a > 0 && <Chip label={step.a + ' g'} size="small" className={classes.stepChip} />}
+            </div>
+          </div>
+          <div>
+            <IconButton size="small" onClick={() => this.openStepDialog('boil', step, i)}>
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton size="small" onClick={() => this.deleteStep('boil', i)}>
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   render() {
     const { classes } = this.props;
     const { name, mashSteps, boilSteps, brewSettings, beerParams, impressions, loading } = this.state;
 
     if (loading) {
-      return <Typography className={classes.root}><IntText text="Loading" />...</Typography>;
+      return (
+        <div className={classes.root}>
+          <Typography><IntText text="Loading" />...</Typography>
+        </div>
+      );
     }
 
     return (
-      <div className={classes.root}>
-        <Typography variant="h6" gutterBottom>
-          <IntText text="Recipe.Editor" />
-        </Typography>
+      <LayoutContext.Consumer>
+        {({ modernLayout }) => (
+          <div className={classes.root}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+              <Typography variant="h6" gutterBottom style={{ marginBottom: 0 }}>
+                <IntText text="Recipe.Editor" />
+              </Typography>
+              <Button
+                size="small"
+                onClick={this.handleExport}
+                color={modernLayout ? "secondary" : "default"}
+              >
+                <GetAppIcon style={{ marginRight: 4, fontSize: 18 }} />
+                <IntText text="Recipe.Export" />
+              </Button>
+            </div>
 
-        <Paper className={classes.section}>
-          <TextField
-            label={<IntText text="Name" />}
-            value={name}
-            onChange={this.handleChange('name')}
-            fullWidth
-            margin="normal"
-          />
-        </Paper>
+            <Paper className={classes.section}>
+              <TextField
+                label={<IntText text="Name" />}
+                value={name}
+                onChange={this.handleChange('name')}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+              />
+            </Paper>
 
-        <Paper className={classes.section}>
-          <div className={classes.sectionTitle}>
-            <Typography variant="subtitle1"><IntText text="MashSettings.Settings" /></Typography>
-            <Button size="small" onClick={() => this.openStepDialog('mash', null, -1)}>
-              <AddIcon /> <IntText text="Recipe.AddStep" />
-            </Button>
+            <Paper className={classes.section}>
+              <div className={classes.sectionTitle}>
+                <Typography variant="subtitle1">
+                  <IntText text="Recipe.MashSteps" />
+                  {mashSteps.length > 0 && (
+                    <Chip label={mashSteps.length} size="small" style={{ marginLeft: 8, height: 20 }} />
+                  )}
+                </Typography>
+                <Button
+                  size="small"
+                  color={modernLayout ? "secondary" : "primary"}
+                  onClick={() => this.openStepDialog('mash', null, -1)}
+                >
+                  <AddIcon style={{ fontSize: 18 }} /> <IntText text="Recipe.AddStep" />
+                </Button>
+              </div>
+              <Divider style={{ marginBottom: 12 }} />
+              {mashSteps.length === 0 ? (
+                <div className={classes.emptySteps}>
+                  <Typography variant="body2"><IntText text="Recipe.NoSteps" /></Typography>
+                </div>
+              ) : (
+                mashSteps.map((step, i) => this.renderMashStepCard(step, i))
+              )}
+            </Paper>
+
+            <Paper className={classes.section}>
+              <div className={classes.sectionTitle}>
+                <Typography variant="subtitle1">
+                  <IntText text="Recipe.BoilSteps" />
+                  {boilSteps.length > 0 && (
+                    <Chip label={boilSteps.length} size="small" style={{ marginLeft: 8, height: 20 }} />
+                  )}
+                </Typography>
+                <Button
+                  size="small"
+                  color={modernLayout ? "secondary" : "primary"}
+                  onClick={() => this.openStepDialog('boil', null, -1)}
+                >
+                  <AddIcon style={{ fontSize: 18 }} /> <IntText text="Recipe.AddStep" />
+                </Button>
+              </div>
+              <Divider style={{ marginBottom: 12 }} />
+              {boilSteps.length === 0 ? (
+                <div className={classes.emptySteps}>
+                  <Typography variant="body2"><IntText text="Recipe.NoSteps" /></Typography>
+                </div>
+              ) : (
+                boilSteps.map((step, i) => this.renderBoilStepCard(step, i))
+              )}
+            </Paper>
+
+            <Paper className={classes.section}>
+              <div className={classes.sectionTitle}>
+                <Typography variant="subtitle1"><IntText text="Recipe.BrewParams" /></Typography>
+              </div>
+              <Divider />
+              <Grid container spacing={16} style={{ marginTop: 8 }}>
+                <Grid item xs={6} sm={4}>
+                  <TextField
+                    label={<IntText text="Recipe.BoilTime" />}
+                    value={brewSettings.bt != null ? brewSettings.bt : ''}
+                    onChange={this.handleBrewSettingChange('bt')}
+                    type="number"
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+                <Grid item xs={6} sm={4}>
+                  <TextField
+                    label={<IntText text="Recipe.BoilTemp" />}
+                    value={brewSettings.btemp != null ? brewSettings.btemp : ''}
+                    onChange={this.handleBrewSettingChange('btemp')}
+                    type="number"
+                    fullWidth
+                    margin="normal"
+                  />
+                </Grid>
+              </Grid>
+            </Paper>
+
+            <Paper className={classes.section}>
+              <div className={classes.sectionTitle}>
+                <Typography variant="subtitle1"><IntText text="Recipe.BeerParams" /></Typography>
+              </div>
+              <Divider />
+              <Grid container spacing={16} className={classes.paramGrid}>
+                <Grid item xs={6} sm={3}>
+                  <TextField label="IBU" value={beerParams.ibu} onChange={this.handleBeerParamChange('ibu')} type="number" fullWidth margin="normal" />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                  <TextField label="ABV (%)" value={beerParams.abv} onChange={this.handleBeerParamChange('abv')} type="number" inputProps={{ step: 0.1 }} fullWidth margin="normal" />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                  <TextField label="COR (EBC)" value={beerParams.cor} onChange={this.handleBeerParamChange('cor')} type="number" inputProps={{ step: 0.1 }} fullWidth margin="normal" />
+                </Grid>
+                <Grid item xs={6} sm={3}>
+                  <TextField label="FG" value={beerParams.fg} onChange={this.handleBeerParamChange('fg')} type="number" inputProps={{ step: 0.001 }} fullWidth margin="normal" />
+                </Grid>
+              </Grid>
+            </Paper>
+
+            <Paper className={classes.section}>
+              <div className={classes.sectionTitle}>
+                <Typography variant="subtitle1"><IntText text="Recipe.Impressions" /></Typography>
+              </div>
+              <Divider />
+              <TextField
+                label={<IntText text="Recipe.ImpressionsDesc" />}
+                value={impressions}
+                onChange={this.handleChange('impressions')}
+                fullWidth
+                multiline
+                rows={4}
+                margin="normal"
+                variant="outlined"
+              />
+            </Paper>
+
+            <div className={classes.actions}>
+              <Button onClick={this.props.onBack}>
+                <IntText text="Cancel" />
+              </Button>
+              <Button variant="contained" color={modernLayout ? "secondary" : "primary"} onClick={this.handleSave}>
+                <IntText text="Save" />
+              </Button>
+            </div>
+
+            {this.renderStepDialog()}
           </div>
-          <Divider />
-          {mashSteps.length === 0 ? (
-            <Typography style={{ padding: 16, color: '#999' }}><IntText text="Recipe.NoSteps" /></Typography>
-          ) : (
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell><IntText text="Name" /></TableCell>
-                  <TableCell align="right"><IntText text="Temperature" /></TableCell>
-                  <TableCell align="right"><IntText text="Time" /></TableCell>
-                  <TableCell align="center"><IntText text="Recirculation" /></TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {mashSteps.map((step, i) => (
-                  <TableRow key={i}>
-                    <TableCell>{step.n}</TableCell>
-                    <TableCell align="right">{step.t}°C</TableCell>
-                    <TableCell align="right">{step.tm} min</TableCell>
-                    <TableCell align="center">{step.r ? 'On' : 'Off'}</TableCell>
-                    <TableCell align="right" style={{ padding: 0 }}>
-                      <IconButton size="small" onClick={() => this.openStepDialog('mash', step, i)}><EditIcon fontSize="small" /></IconButton>
-                      <IconButton size="small" onClick={() => this.deleteStep('mash', i)}><DeleteIcon fontSize="small" /></IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </Paper>
-
-        <Paper className={classes.section}>
-          <div className={classes.sectionTitle}>
-            <Typography variant="subtitle1"><IntText text="BoilSettings.Settings" /></Typography>
-            <Button size="small" onClick={() => this.openStepDialog('boil', null, -1)}>
-              <AddIcon /> <IntText text="Recipe.AddStep" />
-            </Button>
-          </div>
-          <Divider />
-          {boilSteps.length === 0 ? (
-            <Typography style={{ padding: 16, color: '#999' }}><IntText text="Recipe.NoSteps" /></Typography>
-          ) : (
-            <Table size="small">
-              <TableHead>
-                <TableRow>
-                  <TableCell><IntText text="Name" /></TableCell>
-                  <TableCell align="right"><IntText text="Time" /></TableCell>
-                  <TableCell align="right"><IntText text="Amount" /></TableCell>
-                  <TableCell />
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {boilSteps.map((step, i) => (
-                  <TableRow key={i}>
-                    <TableCell>{step.n}</TableCell>
-                    <TableCell align="right">{step.tm} min</TableCell>
-                    <TableCell align="right">{step.a} g</TableCell>
-                    <TableCell align="right" style={{ padding: 0 }}>
-                      <IconButton size="small" onClick={() => this.openStepDialog('boil', step, i)}><EditIcon fontSize="small" /></IconButton>
-                      <IconButton size="small" onClick={() => this.deleteStep('boil', i)}><DeleteIcon fontSize="small" /></IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
-        </Paper>
-
-        <Paper className={classes.section}>
-          <div className={classes.sectionTitle}>
-            <Typography variant="subtitle1"><IntText text="Recipe.BrewParams" /></Typography>
-          </div>
-          <Divider />
-          <TextField
-            label={<IntText text="Recipe.BoilTime" />}
-            value={brewSettings.bt != null ? brewSettings.bt : ''}
-            onChange={this.handleBrewSettingChange('bt')}
-            type="number"
-            margin="normal"
-            style={{ marginRight: 16 }}
-          />
-          <TextField
-            label={<IntText text="Recipe.BoilTemp" />}
-            value={brewSettings.btemp != null ? brewSettings.btemp : ''}
-            onChange={this.handleBrewSettingChange('btemp')}
-            type="number"
-            margin="normal"
-          />
-        </Paper>
-
-        <Paper className={classes.section}>
-          <div className={classes.sectionTitle}>
-            <Typography variant="subtitle1"><IntText text="Recipe.BeerParams" /></Typography>
-          </div>
-          <Divider />
-          <Grid container spacing={16} style={{ marginTop: 8 }}>
-            <Grid item xs={6} sm={3}>
-              <TextField label="IBU" value={beerParams.ibu} onChange={this.handleBeerParamChange('ibu')} type="number" fullWidth margin="normal" />
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <TextField label="ABV (%)" value={beerParams.abv} onChange={this.handleBeerParamChange('abv')} type="number" inputProps={{ step: 0.1 }} fullWidth margin="normal" />
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <TextField label="COR (EBC)" value={beerParams.cor} onChange={this.handleBeerParamChange('cor')} type="number" inputProps={{ step: 0.1 }} fullWidth margin="normal" />
-            </Grid>
-            <Grid item xs={6} sm={3}>
-              <TextField label="FG" value={beerParams.fg} onChange={this.handleBeerParamChange('fg')} type="number" inputProps={{ step: 0.001 }} fullWidth margin="normal" />
-            </Grid>
-          </Grid>
-        </Paper>
-
-        <Paper className={classes.section}>
-          <div className={classes.sectionTitle}>
-            <Typography variant="subtitle1"><IntText text="Recipe.Impressions" /></Typography>
-          </div>
-          <Divider />
-          <TextField
-            label={<IntText text="Recipe.ImpressionsDesc" />}
-            value={impressions}
-            onChange={this.handleChange('impressions')}
-            fullWidth
-            multiline
-            rows={4}
-            margin="normal"
-          />
-        </Paper>
-
-        <div className={classes.actions}>
-          <Button onClick={this.props.onBack} style={{ marginRight: 8 }}>
-            <IntText text="Cancel" />
-          </Button>
-          <Button variant="contained" color="primary" onClick={this.handleSave}>
-            <IntText text="Save" />
-          </Button>
-        </div>
-
-        {this.renderStepDialog()}
-      </div>
+        )}
+      </LayoutContext.Consumer>
     );
   }
 }

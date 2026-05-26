@@ -204,6 +204,30 @@
     "EditMashStep": "Editar Etapa de Mostura",
     "EditBoilStep": "Editar Etapa de Fervura",
     "AddStep": "Adicionar Etapa",
-    "NoSteps": "Nenhuma etapa definida."
+    "NoSteps": "Nenhuma etapa definida.",
+    "Export": "Exportar",
+    "ExportRecipe": "Exportar Receita",
+    "ExportDescription": "Baixar esta receita como arquivo JSON para backup ou compartilhamento.",
+    "DeleteConfirmation": "Excluir esta receita?",
+    "Duplicate": "Duplicar",
+    "Search": "Buscar receitas...",
+    "Steps": "Etapas",
+    "MashSteps": "Etapas de Mostura",
+    "BoilSteps": "Etapas de Fervura",
+    "Recirculation": "Recirculação",
+    "StepLock": "Bloqueio de Etapa",
+    "Heater": "Resistência",
+    "FullPower": "Potência Máxima",
+    "HopAdditions": "Adições de Lúpulo",
+    "SortBy": "Ordenar por",
+    "NameAZ": "Nome A-Z",
+    "Newest": "Mais recentes",
+    "Oldest": "Mais antigos"
+  },
+  "Layout": {
+    "Classic": "Visual Clássico",
+    "Modern": "Visual Moderno",
+    "SwitchToClassic": "Mudar para Layout Clássico",
+    "SwitchToModern": "Mudar para Layout Moderno"
   }
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import RecipeList from '../components/RecipeList';
 import RecipeEditor from '../components/RecipeEditor';
 import IntText from '../components/IntText';
@@ -29,14 +29,14 @@ class RecipeManagement extends Component {
     const { view, editRecipeId } = this.state;
 
     return (
-      <MenuAppBar sectionTitle={<IntText text="Recipe.Title" />}>
+      <AppLayout sectionTitle={<IntText text="Recipe.Title" />}>
         {view === 'list' && (
           <RecipeList onEdit={this.handleEdit} />
         )}
         {view === 'edit' && (
           <RecipeEditor recipeId={editRecipeId} onBack={this.handleBack} onSaved={this.handleSaved} />
         )}
-      </MenuAppBar>
+      </AppLayout>
     );
   }
 }

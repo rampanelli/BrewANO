@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import OTASettings from './OTASettings';
 import { PageView, initGA, Event } from '../components/Tracking'
 import IntText from '../components/IntText'
@@ -12,9 +12,9 @@ class OTAConfiguration extends Component {
 
   render() {
     return (
-      <MenuAppBar sectionTitle={<IntText text="OTASettings.OTAConfiguration" />}>
+      <AppLayout sectionTitle={<IntText text="OTASettings.OTAConfiguration" />}>
         <OTASettings />
-      </MenuAppBar>
+      </AppLayout>
     )
   }
 }

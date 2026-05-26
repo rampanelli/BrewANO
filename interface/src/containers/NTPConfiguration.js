@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import NTPSettings from './NTPSettings';
 import NTPStatus from './NTPStatus';
 import Tabs from '@material-ui/core/Tabs';
@@ -28,14 +28,14 @@ class NTPConfiguration extends Component {
   render() {
     const { selectedTab } = this.state;
     return (
-        <MenuAppBar sectionTitle={<IntText text="NTPSettings.NTPConfiguration" />}>
+        <AppLayout sectionTitle={<IntText text="NTPSettings.NTPConfiguration" />}>
         <Tabs value={selectedTab} onChange={this.handleTabChange} indicatorColor="secondary" textColor="contrastText" fullWidth scrollable>
            <Tab value="ntpStatus" label={<IntText text="NTPSettings.NTPStatus" />} />
            <Tab value="ntpSettings" label={<IntText text="NTPSettings.Settings" />} />
          </Tabs>
          {selectedTab === "ntpStatus" && <NTPStatus />}
          {selectedTab === "ntpSettings" && <NTPSettings />}
-        </MenuAppBar>
+        </AppLayout>
     )
   }
 }

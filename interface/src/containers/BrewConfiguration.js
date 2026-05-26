@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import MashSettings from './MashSettings';
 import BoilSettings from './BoilSettings';
 import BrewSettings from './BrewSettings'
@@ -44,7 +44,7 @@ class BrewConfiguration extends Component {
   render() {
     const { selectedTab, importOpen } = this.state
     return (
-      <MenuAppBar sectionTitle="Brew Settings">
+      <AppLayout sectionTitle="Brew Settings">
         <Tabs value={selectedTab} onChange={this.handleTabChange} indicatorColor="secondary" textColor="contrastText" fullWidth scrollable>
           <Tab value="MashSettings" label={<IntText text="Mash" />} />
           <Tab value="BoilSettings" label={<IntText text="Boil" />} />
@@ -73,7 +73,7 @@ class BrewConfiguration extends Component {
         {selectedTab === "MashSettings" && <MashSettings />}
         {selectedTab === "BoilSettings" && <BoilSettings />}
         {selectedTab === "BrewSettings" && <BrewSettings />}
-      </MenuAppBar>
+      </AppLayout>
     )
   }
 }

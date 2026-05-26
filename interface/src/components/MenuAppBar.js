@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import Hidden from '@material-ui/core/Hidden';
 import Divider from '@material-ui/core/Divider';
@@ -24,8 +25,10 @@ import LocalDrink from '@material-ui/icons/LocalDrink'
 import Assignment from '@material-ui/icons/Assignment'
 import Bookmark from '@material-ui/icons/Bookmark'
 import ContactSupport from '@material-ui/icons/ContactSupport'
+import StyleIcon from '@material-ui/icons/Style'
 
 import IntText from '../components/IntText'
+import LayoutContext from '../context/LayoutContext'
 
 const drawerWidth = 250;
 const drawerWidthPermanent = 60
@@ -98,9 +101,37 @@ const styles = theme => ({
       marginTop: 64,
     },
   },
+  layoutToggle: {
+    position: 'fixed',
+    bottom: 0,
+    width: drawerWidthPermanent,
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 8,
+    [theme.breakpoints.up('md')]: {
+      width: drawerWidthPermanent,
+    },
+  },
+  layoutToggleMobile: {
+    width: drawerWidth,
+  },
+  toggleBtn: {
+    minWidth: 'auto',
+    padding: '4px 8px',
+    fontSize: '0.65rem',
+    textTransform: 'none',
+    color: theme.palette.text.secondary,
+    borderColor: 'rgba(255,167,38,0.5)',
+    borderRadius: 20,
+    '&:hover': {
+      borderColor: '#ffa726',
+      color: '#ffa726',
+      backgroundColor: 'rgba(255,167,38,0.1)',
+    },
+  },
 });
 
-class MenuAppBar extends React.Component {
+class MenuAppBarBase extends React.Component {
   state = {
     mobileOpen: false,
   };
@@ -110,7 +141,7 @@ class MenuAppBar extends React.Component {
   };
 
   render() {
-    const { classes, theme, children, sectionTitle } = this.props;
+    const { classes, theme, children, sectionTitle, onToggleLayout } = this.props;
 
     const drawer = (
       <div>
@@ -181,6 +212,17 @@ class MenuAppBar extends React.Component {
               : null}
           </ListItem>
         </List>
+        <div className={classes.layoutToggle + (this.state.mobileOpen ? ' ' + classes.layoutToggleMobile : '')}>
+          <Button
+            variant="outlined"
+            size="small"
+            className={classes.toggleBtn}
+            onClick={onToggleLayout}
+          >
+            <StyleIcon style={{ fontSize: 14, marginRight: 4 }} />
+            {this.state.mobileOpen ? <IntText text="Layout.Modern" /> : null}
+          </Button>
+        </div>
       </div>
     );
 
@@ -210,7 +252,7 @@ class MenuAppBar extends React.Component {
               }}
               onClose={this.handleDrawerToggle}
               ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
+                keepMounted: true,
               }}
             >
               {drawer}
@@ -236,10 +278,29 @@ class MenuAppBar extends React.Component {
   }
 }
 
-MenuAppBar.propTypes = {
+MenuAppBarBase.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  sectionTitle: PropTypes.string.isRequired,
+  sectionTitle: PropTypes.string,
+  children: PropTypes.node,
+  onToggleLayout: PropTypes.func,
 };
 
-export default withStyles(styles, { withTheme: true })(MenuAppBar);
+const StyledMenuAppBar = withStyles(styles, { withTheme: true })(MenuAppBarBase);
+
+function MenuAppBar(props) {
+  return (
+    <LayoutContext.Consumer>
+      {({ toggleLayout }) => (
+        <StyledMenuAppBar {...props} onToggleLayout={toggleLayout} />
+      )}
+    </LayoutContext.Consumer>
+  );
+}
+
+MenuAppBar.propTypes = {
+  sectionTitle: PropTypes.string,
+  children: PropTypes.node,
+};
+
+export default MenuAppBar;

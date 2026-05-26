@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-import MenuAppBar from '../components/MenuAppBar';
+import AppLayout from '../components/AppLayout';
 import WiFiNetworkScanner from './WiFiNetworkScanner';
 import WiFiSettings from './WiFiSettings';
 import WiFiStatus from './WiFiStatus';
@@ -43,7 +43,7 @@ class WiFiConfiguration extends Component {
   render() {
     const { selectedTab } = this.state;
     return (
-      <MenuAppBar sectionTitle={<IntText text="WiFiSettings.WiFiConfiguration" />}>
+      <AppLayout sectionTitle={<IntText text="WiFiSettings.WiFiConfiguration" />}>
         <Tabs value={selectedTab} onChange={this.handleTabChange} indicatorColor="secondary" textColor="contrastText" fullWidth scrollable>
           <Tab value="wifiStatus" label={<IntText text="WiFiSettings.WiFiStatus" />} />
           <Tab value="networkScanner" label={<IntText text="WiFiSettings.NetworkScanner" />} />
@@ -52,7 +52,7 @@ class WiFiConfiguration extends Component {
         {selectedTab === "wifiStatus" && <WiFiStatus fullDetails={true} />}
         {selectedTab === "networkScanner" && <WiFiNetworkScanner selectNetwork={this.selectNetwork} />}
         {selectedTab === "wifiSettings" && <WiFiSettings deselectNetwork={this.deselectNetwork} selectedNetwork={this.state.selectedNetwork} />}
-      </MenuAppBar>
+      </AppLayout>
     )
   }
 }

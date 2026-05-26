@@ -203,6 +203,30 @@
     "EditMashStep": "Edit Mash Step",
     "EditBoilStep": "Edit Boil Step",
     "AddStep": "Add Step",
-    "NoSteps": "No steps defined."
+    "NoSteps": "No steps defined.",
+    "Export": "Export",
+    "ExportRecipe": "Export Recipe",
+    "ExportDescription": "Download this recipe as a JSON file for backup or sharing.",
+    "DeleteConfirmation": "Delete this recipe?",
+    "Duplicate": "Duplicate",
+    "Search": "Search recipes...",
+    "Steps": "Steps",
+    "MashSteps": "Mash Steps",
+    "BoilSteps": "Boil Steps",
+    "Recirculation": "Recirculation",
+    "StepLock": "Step Lock",
+    "Heater": "Heater",
+    "FullPower": "Full Power",
+    "HopAdditions": "Hop Additions",
+    "SortBy": "Sort by",
+    "NameAZ": "Name A-Z",
+    "Newest": "Newest",
+    "Oldest": "Oldest"
+  },
+  "Layout": {
+    "Classic": "Classic View",
+    "Modern": "Modern View",
+    "SwitchToClassic": "Switch to Classic Layout",
+    "SwitchToModern": "Switch to Modern Layout"
   }
 }

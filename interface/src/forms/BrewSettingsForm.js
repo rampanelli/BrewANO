@@ -10,8 +10,10 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Select from '@material-ui/core/Select';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Divider from '@material-ui/core/Divider';
 import { Grid, Paper } from '@material-ui/core';
 import IntText from '../components/IntText'
+import LayoutContext from '../context/LayoutContext'
 
 const styles = theme => ({
   root: {
@@ -415,6 +417,30 @@ class BrewSettingsForm extends Component {
                 </Grid>
 
                 <div style={{ marginTop: 20, }}>
+                  <LayoutContext.Consumer>
+                    {({ modernLayout, toggleLayout }) => (
+                      <Paper className={classes.paper} style={{ marginBottom: 16 }}>
+                        <Typography variant="subtitle1" style={{ marginBottom: 8 }}>
+                          <IntText text="Layout.Classic" /> / <IntText text="Layout.Modern" />
+                        </Typography>
+                        <Divider style={{ marginBottom: 12 }} />
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              checked={modernLayout}
+                              onChange={toggleLayout}
+                              color="secondary"
+                            />
+                          }
+                          label={
+                            <Typography variant="body2">
+                              {modernLayout ? <IntText text="Layout.SwitchToClassic" /> : <IntText text="Layout.SwitchToModern" />}
+                            </Typography>
+                          }
+                        />
+                      </Paper>
+                    )}
+                  </LayoutContext.Consumer>
                   <Button variant="raised" fullWidth color="secondary" type="submit">
                     {<IntText text="Save" />}
                   </Button>

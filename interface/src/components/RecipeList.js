@@ -14,15 +14,21 @@ import DialogActions from '@material-ui/core/DialogActions';
 import TextField from '@material-ui/core/TextField';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
+import Chip from '@material-ui/core/Chip';
+import Tooltip from '@material-ui/core/Tooltip';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import SearchIcon from '@material-ui/icons/Search';
 import { LIST_RECIPES_ENDPOINT, SAVE_RECIPE_ENDPOINT, DELETE_RECIPE_ENDPOINT, ACTIVATE_RECIPE_ENDPOINT, GET_RECIPE_ENDPOINT } from '../constants/Endpoints';
 import { ExecuteRestCall } from '../components/Utils';
 import { parseBeerSmithFile } from '../utils/BeerSmithImporter';
 import IntText from '../components/IntText';
+import LayoutContext from '../context/LayoutContext';
 
 const styles = theme => ({
   root: {
@@ -34,34 +40,72 @@ const styles = theme => ({
     alignItems: 'center',
     marginBottom: theme.spacing.unit * 2,
     flexWrap: 'wrap',
+    gap: theme.spacing.unit,
+  },
+  headerLeft: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing.unit * 2,
+    flexWrap: 'wrap',
+  },
+  headerRight: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing.unit,
+    flexWrap: 'wrap',
+  },
+  searchField: {
+    minWidth: 200,
   },
   card: {
     height: '100%',
     display: 'flex',
     flexDirection: 'column',
+    position: 'relative',
+    overflow: 'visible',
   },
   cardContent: {
     flexGrow: 1,
+    paddingBottom: 48,
   },
   cardActions: {
     justifyContent: 'flex-end',
+    padding: '4px 8px',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
   },
   beerParams: {
     display: 'flex',
     flexWrap: 'wrap',
-    gap: theme.spacing.unit,
+    gap: 4,
     marginTop: theme.spacing.unit,
   },
   param: {
     padding: '2px 8px',
-    backgroundColor: theme.palette.type === 'dark' ? '#424242' : '#e0e0e0',
+    backgroundColor: theme.palette.type === 'dark' ? '#424242' : '#e8eaf6',
     borderRadius: 4,
-    fontSize: '0.75rem',
+    fontSize: '0.7rem',
+    fontWeight: 500,
+    color: theme.palette.type === 'dark' ? '#ccc' : '#3f51b5',
   },
   empty: {
     textAlign: 'center',
     padding: theme.spacing.unit * 4,
     color: theme.palette.text.secondary,
+  },
+  recipeName: {
+    fontWeight: 600,
+    fontSize: '0.95rem',
+    marginBottom: 4,
+  },
+  stepCount: {
+    fontSize: '0.7rem',
+    color: theme.palette.text.secondary,
+    marginTop: 4,
+  },
+  sortChip: {
+    marginRight: 4,
   },
 });
 
@@ -72,6 +116,9 @@ class RecipeList extends Component {
       recipes: [],
       importOpen: false,
       importName: '',
+      importRecipe: null,
+      search: '',
+      sortBy: 'newest',
     };
   }
 
@@ -112,6 +159,57 @@ class RecipeList extends Component {
 
   handleEdit = (recipe) => {
     if (this.props.onEdit) this.props.onEdit(recipe.id);
+  };
+
+  handleDuplicate = (recipe) => {
+    ExecuteRestCall(GET_RECIPE_ENDPOINT + '?id=' + recipe.id, 'GET', (fullRecipe) => {
+      const body = {
+        name: (fullRecipe.name || recipe.name) + ' (copy)',
+        mashSteps: fullRecipe.mashSteps || [],
+        boilSteps: fullRecipe.boilSteps || [],
+        brewSettings: fullRecipe.brewSettings || {},
+        beerParams: fullRecipe.beerParams || { ibu: 0, abv: 0, cor: 0, fg: 0 },
+        impressions: fullRecipe.impressions || '',
+      };
+      fetch(SAVE_RECIPE_ENDPOINT, {
+        method: 'POST',
+        body: JSON.stringify(body),
+        headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+      }).then(response => {
+        if (response.ok) {
+          this.props.enqueueSnackbar('Recipe duplicated!', { variant: 'success' });
+          this.loadRecipes();
+        } else {
+          this.props.enqueueSnackbar('Failed to duplicate recipe.', { variant: 'error' });
+        }
+      });
+    }, () => {
+      this.props.enqueueSnackbar('Failed to load recipe for duplicate.', { variant: 'error' });
+    }, this.props);
+  };
+
+  handleExport = (recipe) => {
+    ExecuteRestCall(GET_RECIPE_ENDPOINT + '?id=' + recipe.id, 'GET', (fullRecipe) => {
+      const exportData = {
+        name: fullRecipe.name || recipe.name,
+        mashSteps: fullRecipe.mashSteps || [],
+        boilSteps: fullRecipe.boilSteps || [],
+        brewSettings: fullRecipe.brewSettings || {},
+        beerParams: fullRecipe.beerParams || {},
+        impressions: fullRecipe.impressions || '',
+        exportedAt: new Date().toISOString(),
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = (exportData.name || 'recipe') + '.json';
+      a.click();
+      URL.revokeObjectURL(url);
+      this.props.enqueueSnackbar('Recipe exported!', { variant: 'success' });
+    }, () => {
+      this.props.enqueueSnackbar('Failed to export recipe.', { variant: 'error' });
+    }, this.props);
   };
 
   handleImportOpen = () => {
@@ -176,6 +274,26 @@ class RecipeList extends Component {
       });
   };
 
+  handleSortChange = (sortBy) => {
+    this.setState({ sortBy });
+  };
+
+  getFilteredAndSorted() {
+    const { recipes, search, sortBy } = this.state;
+    let filtered = recipes;
+    if (search) {
+      const s = search.toLowerCase();
+      filtered = recipes.filter(r => (r.name || '').toLowerCase().includes(s));
+    }
+    const sorted = [...filtered].sort((a, b) => {
+      if (sortBy === 'name') return (a.name || '').localeCompare(b.name || '');
+      if (sortBy === 'newest') return (b.id || 0) - (a.id || 0);
+      if (sortBy === 'oldest') return (a.id || 0) - (b.id || 0);
+      return 0;
+    });
+    return sorted;
+  }
+
   renderBeerParams(recipe) {
     const { classes } = this.props;
     const bp = recipe.beerParams || {};
@@ -183,109 +301,180 @@ class RecipeList extends Component {
     if (!hasParams) return null;
     return (
       <div className={classes.beerParams}>
-        {bp.ibu > 0 && <span className={classes.param}>IBU: {bp.ibu}</span>}
-        {bp.abv > 0 && <span className={classes.param}>ABV: {bp.abv}%</span>}
-        {bp.cor > 0 && <span className={classes.param}>COR: {bp.cor}</span>}
-        {bp.fg > 0 && <span className={classes.param}>FG: {bp.fg}</span>}
+        {bp.ibu > 0 && <span className={classes.param}>IBU {bp.ibu}</span>}
+        {bp.abv > 0 && <span className={classes.param}>ABV {bp.abv}%</span>}
+        {bp.cor > 0 && <span className={classes.param}>EBC {bp.cor}</span>}
+        {bp.fg > 0 && <span className={classes.param}>FG {bp.fg}</span>}
       </div>
     );
   }
 
   render() {
     const { classes } = this.props;
-    const { recipes, importOpen, importName, importRecipe } = this.state;
+    const { importOpen, importName, importRecipe, search, sortBy } = this.state;
+    const filtered = this.getFilteredAndSorted();
 
     return (
-      <div className={classes.root}>
-        <div className={classes.header}>
-          <Typography variant="h6"><IntText text="Recipe.List" /></Typography>
-          <div>
-            <input
-              accept=".bsmx,.xml,.json"
-              style={{ display: 'none' }}
-              id="recipe-import-file"
-              type="file"
-              onChange={this.handleImportFile}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              size="small"
-              onClick={this.handleImportOpen}
-              style={{ marginRight: 8 }}
-            >
-              <AddIcon style={{ marginRight: 4 }} />
-              <IntText text="Recipe.New" />
-            </Button>
-          </div>
-        </div>
-
-        {recipes.length === 0 ? (
-          <Typography className={classes.empty}>
-            <IntText text="Recipe.NoRecipes" />
-          </Typography>
-        ) : (
-          <Grid container spacing={16}>
-            {recipes.map(recipe => (
-              <Grid item xs={12} sm={6} md={4} lg={3} key={recipe.id}>
-                <Card className={classes.card}>
-                  <CardContent className={classes.cardContent}>
-                    <Typography variant="subtitle1" noWrap>
-                      {recipe.name || 'Recipe #' + recipe.id}
-                    </Typography>
-                    {this.renderBeerParams(recipe)}
-                  </CardContent>
-                  <CardActions className={classes.cardActions}>
-                    <IconButton size="small" onClick={() => this.handleActivate(recipe)} title="Activate">
-                      <PlayArrowIcon />
-                    </IconButton>
-                    <IconButton size="small" onClick={() => this.handleEdit(recipe)} title="Edit">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton size="small" onClick={() => this.handleDelete(recipe)} title="Delete">
-                      <DeleteIcon />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        )}
-
-        <Dialog open={importOpen} onClose={this.handleImportClose} maxWidth="md" fullWidth>
-          <DialogTitle><IntText text="Import.Title" /></DialogTitle>
-          <DialogContent>
-            <div style={{ marginBottom: 16 }}>
-              <label htmlFor="recipe-import-file">
-                <Button variant="outlined" component="span">
-                  <CloudUploadIcon style={{ marginRight: 8 }} />
-                  <IntText text="Import.SelectFile" />
-                </Button>
-              </label>
-            </div>
-            {importRecipe ? (
-              <div>
+      <LayoutContext.Consumer>
+        {({ modernLayout }) => (
+          <div className={classes.root}>
+            <div className={classes.header}>
+              <div className={classes.headerLeft}>
+                <Typography variant={modernLayout ? "h6" : "h6"}>
+                  <IntText text="Recipe.List" />
+                </Typography>
                 <TextField
-                  label={<IntText text="Name" />}
-                  value={importName}
-                  onChange={e => this.setState({ importName: e.target.value })}
-                  fullWidth
-                  margin="normal"
+                  className={classes.searchField}
+                  placeholder="Buscar receitas..."
+                  value={search}
+                  onChange={e => this.setState({ search: e.target.value })}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <SearchIcon fontSize="small" />
+                      </InputAdornment>
+                    ),
+                  }}
+                  margin="none"
                 />
-                <Typography variant="subtitle2" style={{ marginTop: 8 }}>
-                  {importRecipe.mashSteps.length} mash steps, {importRecipe.boilSteps.length} hop additions
+                <div>
+                  <Chip
+                    label="A-Z"
+                    size="small"
+                    className={classes.sortChip}
+                    variant={sortBy === 'name' ? 'default' : 'outlined'}
+                    color={sortBy === 'name' ? 'primary' : 'default'}
+                    onClick={() => this.handleSortChange('name')}
+                  />
+                  <Chip
+                    label="Newest"
+                    size="small"
+                    className={classes.sortChip}
+                    variant={sortBy === 'newest' ? 'default' : 'outlined'}
+                    color={sortBy === 'newest' ? 'primary' : 'default'}
+                    onClick={() => this.handleSortChange('newest')}
+                  />
+                  <Chip
+                    label="Oldest"
+                    size="small"
+                    className={classes.sortChip}
+                    variant={sortBy === 'oldest' ? 'default' : 'outlined'}
+                    color={sortBy === 'oldest' ? 'primary' : 'default'}
+                    onClick={() => this.handleSortChange('oldest')}
+                  />
+                </div>
+              </div>
+              <div className={classes.headerRight}>
+                <input
+                  accept=".bsmx,.xml,.json"
+                  style={{ display: 'none' }}
+                  id="recipe-import-file"
+                  type="file"
+                  onChange={this.handleImportFile}
+                />
+                <Button
+                  variant="contained"
+                  color={modernLayout ? "secondary" : "primary"}
+                  size="small"
+                  onClick={this.handleImportOpen}
+                >
+                  <AddIcon style={{ marginRight: 4 }} />
+                  <IntText text="Recipe.New" />
+                </Button>
+              </div>
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className={classes.empty}>
+                <Typography color="textSecondary">
+                  <IntText text="Recipe.NoRecipes" />
                 </Typography>
               </div>
-            ) : null}
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={this.handleImportClose}><IntText text="Cancel" /></Button>
-            <Button onClick={this.handleImportSave} variant="contained" color="primary" disabled={!importRecipe}>
-              <IntText text="Import.Apply" />
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </div>
+            ) : (
+              <Grid container spacing={16}>
+                {filtered.map(recipe => (
+                  <Grid item xs={12} sm={6} md={4} lg={3} key={recipe.id}>
+                    <Card className={classes.card}>
+                      <CardContent className={classes.cardContent}>
+                        <Typography className={classes.recipeName} noWrap>
+                          {recipe.name || 'Recipe #' + recipe.id}
+                        </Typography>
+                        {recipe.mashStepsCount || recipe.boilStepsCount ? (
+                          <Typography className={classes.stepCount}>
+                            {(recipe.mashStepsCount || 0)} mash · {(recipe.boilStepsCount || 0)} boil
+                          </Typography>
+                        ) : null}
+                        {this.renderBeerParams(recipe)}
+                      </CardContent>
+                      <CardActions className={classes.cardActions}>
+                        <Tooltip title="Activate">
+                          <IconButton size="small" onClick={() => this.handleActivate(recipe)}>
+                            <PlayArrowIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Edit">
+                          <IconButton size="small" onClick={() => this.handleEdit(recipe)}>
+                            <EditIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Duplicate">
+                          <IconButton size="small" onClick={() => this.handleDuplicate(recipe)}>
+                            <FileCopyIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Export">
+                          <IconButton size="small" onClick={() => this.handleExport(recipe)}>
+                            <GetAppIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                        <Tooltip title="Delete">
+                          <IconButton size="small" onClick={() => this.handleDelete(recipe)}>
+                            <DeleteIcon fontSize="small" />
+                          </IconButton>
+                        </Tooltip>
+                      </CardActions>
+                    </Card>
+                  </Grid>
+                ))}
+              </Grid>
+            )}
+
+            <Dialog open={importOpen} onClose={this.handleImportClose} maxWidth="md" fullWidth>
+              <DialogTitle><IntText text="Import.Title" /></DialogTitle>
+              <DialogContent>
+                <div style={{ marginBottom: 16 }}>
+                  <label htmlFor="recipe-import-file">
+                    <Button variant="outlined" component="span">
+                      <CloudUploadIcon style={{ marginRight: 8 }} />
+                      <IntText text="Import.SelectFile" />
+                    </Button>
+                  </label>
+                </div>
+                {importRecipe ? (
+                  <div>
+                    <TextField
+                      label={<IntText text="Name" />}
+                      value={importName}
+                      onChange={e => this.setState({ importName: e.target.value })}
+                      fullWidth
+                      margin="normal"
+                    />
+                    <Typography variant="subtitle2" style={{ marginTop: 8 }}>
+                      {importRecipe.mashSteps.length} mash steps, {importRecipe.boilSteps.length} hop additions
+                    </Typography>
+                  </div>
+                ) : null}
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={this.handleImportClose}><IntText text="Cancel" /></Button>
+                <Button onClick={this.handleImportSave} variant="contained" color="primary" disabled={!importRecipe}>
+                  <IntText text="Import.Apply" />
+                </Button>
+              </DialogActions>
+            </Dialog>
+          </div>
+        )}
+      </LayoutContext.Consumer>
     );
   }
 }
