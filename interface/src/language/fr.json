@@ -72,15 +72,15 @@
   "About": "À propos",
   "Brew": {
     "Title": "Brassage",
-    "StartConfirmation": "Voulez-vous démarrer le brassage ? Vérifiez que vous avez sécurisé le volume d'eau dans la cuve.",
+    "StartConfirmation": "Voulez-vous démarrer le brassage ? Vérifiez que vous avez suffisamment d'eau dans la cuve.",
     "PauseConfirmation": "Voulez-vous mettre le brassage en pause ?",
-    "ResumeConfirmation": "Voulez-vous reprendre le brassage ? Vérifiez que vous avez sécurisé le volume d'eau dans la cuve.",
+    "ResumeConfirmation": "Voulez-vous reprendre le brassage ? Vérifiez que vous avez suffisamment d'eau dans la cuve.",
     "StopConfirmation": "Voulez-vous arrêter le brassage ?",
     "NextConfirmation": "Voulez-vous sauter l'étape actuelle ?",
     "UnLockconfirmation": "Voulez-vous déverrouiller l'étape actuelle ?",
     "BoilConfirmation": "Voulez-vous démarrer l'ébullition ?",
     "BoilPower": "Puissance d'Ébullition",
-    "PumpPrimeConfirmation": "Voulez-vous démarrer l'anticavitation ? Vérifiez que vous avez sécurisé le volume d'eau dans la cuve.",
+    "PumpPrimeConfirmation": "Voulez-vous démarrer l'anticavitation ? Vérifiez que vous avez suffisamment d'eau dans la cuve.",
     "PumpPrimeStarted": "Test d'anticavitation démarré",
     "ReportLog": "Journal de Rapport",
     "ActiveStep": "Étape Active"
@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Capteur Auxiliaire 1",
     "AuxiliarySensor2": "Capteur Auxiliaire 2",
     "AuxiliarySensor3": "Capteur Auxiliaire 3",
-    "PumpON": "Pompe MARCHE",
-    "PumpOFF": "Pompe ARRÊT",
-    "PumpRestInterval": "Pompe MARCHE (sec)",
-    "PumpRestTime": "Pompe ARRÊT (sec)",
-    "PumpCycle": "Cycle de Pompe",
+    "Pump": "Pompe",
+    "PumpOnTime": "Pompe MARCHE (temps)",
+    "PumpOffTime": "Pompe ARRÊT (temps)",
     "EnableBoilKettle": "Activer la Cuve d'Ébullition"
   },
   "WiFiSettings": {

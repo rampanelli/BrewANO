@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Hjelpesensor 1",
     "AuxiliarySensor2": "Hjelpesensor 2",
     "AuxiliarySensor3": "Hjelpesensor 3",
-    "PumpON": "Pumpe PÅ",
-    "PumpOFF": "Pumpe AV",
-    "PumpRestInterval": "Pumpe PÅ (sek)",
-    "PumpRestTime": "Pumpe AV (sek)",
-    "PumpCycle": "Pumpesyklus",
+    "Pump": "Pumpe",
+    "PumpOnTime": "Pumpe PÅ (tid)",
+    "PumpOffTime": "Pumpe AV (tid)",
     "EnableBoilKettle": "Aktiver Kokejele"
   },
   "WiFiSettings": {

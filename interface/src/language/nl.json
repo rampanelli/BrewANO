@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Hulpsensor 1",
     "AuxiliarySensor2": "Hulpsensor 2",
     "AuxiliarySensor3": "Hulpsensor 3",
-    "PumpON": "Pomp AAN",
-    "PumpOFF": "Pomp UIT",
-    "PumpRestInterval": "Pomp AAN (sec)",
-    "PumpRestTime": "Pomp UIT (sec)",
-    "PumpCycle": "Pompcyclus",
+    "Pump": "Pomp",
+    "PumpOnTime": "Pomp AAN (tijd)",
+    "PumpOffTime": "Pomp UIT (tijd)",
     "EnableBoilKettle": "Kookketel Inschakelen"
   },
   "WiFiSettings": {

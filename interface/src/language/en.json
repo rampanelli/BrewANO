@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Auxiliary Sensor 1",
     "AuxiliarySensor2": "Auxiliary Sensor 2",
     "AuxiliarySensor3": "Auxiliary Sensor 3",
-    "PumpON": "Pump ON",
-    "PumpOFF": "Pump OFF",
-    "PumpRestInterval": "Pump ON (sec)",
-    "PumpRestTime": "Pump OFF (sec)",
-    "PumpCycle": "Pump Cycle",
+    "Pump": "Pump",
+    "PumpOnTime": "Pump ON time",
+    "PumpOffTime": "Pump OFF time",
     "EnableBoilKettle": "Enable Boil Kettle"
   },
   "WiFiSettings": {

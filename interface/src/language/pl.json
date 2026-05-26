@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Czujnik Pomocniczy 1",
     "AuxiliarySensor2": "Czujnik Pomocniczy 2",
     "AuxiliarySensor3": "Czujnik Pomocniczy 3",
-    "PumpON": "Pompa WŁ.",
-    "PumpOFF": "Pompa WYŁ.",
-    "PumpRestInterval": "Pompa WŁ. (sek)",
-    "PumpRestTime": "Pompa WYŁ. (sek)",
-    "PumpCycle": "Cykl Pompy",
+    "Pump": "Pompa",
+    "PumpOnTime": "Pompa WŁ. (czas)",
+    "PumpOffTime": "Pompa WYŁ. (czas)",
     "EnableBoilKettle": "Włącz Kocioł Warzelny"
   },
   "WiFiSettings": {

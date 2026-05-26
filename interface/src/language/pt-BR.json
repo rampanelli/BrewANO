@@ -112,11 +112,9 @@
     "AuxiliarySensor1": "Sensor auxiliar 1",
     "AuxiliarySensor2": "Sensor auxiliar 2",
     "AuxiliarySensor3": "Sensor auxiliar 3",
-    "PumpON": "Bomba Ligada",
-    "PumpOFF": "Bomba Desligada",
-    "PumpRestInterval": "Bomba Ligada (seg)",
-    "PumpRestTime": "Bomba Desligada (seg)",
-    "PumpCycle": "CICLO DA BOMBA",
+    "Pump": "Bomba",
+    "PumpOnTime": "Bomba ON (tempo)",
+    "PumpOffTime": "Bomba OFF (tempo)",
     "EnableBoilKettle": "Habilitar panela de fervura"
   },
   "WiFiSettings": {

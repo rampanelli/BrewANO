@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Hilfssensor 1",
     "AuxiliarySensor2": "Hilfssensor 2",
     "AuxiliarySensor3": "Hilfssensor 3",
-    "PumpON": "Pumpe EIN",
-    "PumpOFF": "Pumpe AUS",
-    "PumpRestInterval": "Pumpe EIN (Sek.)",
-    "PumpRestTime": "Pumpe AUS (Sek.)",
-    "PumpCycle": "Pumpenzyklus",
+    "Pump": "Pumpe",
+    "PumpOnTime": "Pumpe EIN (Zeit)",
+    "PumpOffTime": "Pumpe AUS (Zeit)",
     "EnableBoilKettle": "Kochkessel aktivieren"
   },
   "WiFiSettings": {

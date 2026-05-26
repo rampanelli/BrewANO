@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "補助センサー 1",
     "AuxiliarySensor2": "補助センサー 2",
     "AuxiliarySensor3": "補助センサー 3",
-    "PumpON": "ポンプ ON",
-    "PumpOFF": "ポンプ OFF",
-    "PumpRestInterval": "ポンプ ON (秒)",
-    "PumpRestTime": "ポンプ OFF (秒)",
-    "PumpCycle": "ポンプサイクル",
+    "Pump": "ポンプ",
+    "PumpOnTime": "ポンプ ON (時間)",
+    "PumpOffTime": "ポンプ OFF (時間)",
     "EnableBoilKettle": "煮沸ケトルを有効にする"
   },
   "WiFiSettings": {

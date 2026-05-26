@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Sensor Auxiliar 1",
     "AuxiliarySensor2": "Sensor Auxiliar 2",
     "AuxiliarySensor3": "Sensor Auxiliar 3",
-    "PumpON": "Bomba ENCENDIDA",
-    "PumpOFF": "Bomba APAGADA",
-    "PumpRestInterval": "Bomba ENCENDIDA (seg)",
-    "PumpRestTime": "Bomba APAGADA (seg)",
-    "PumpCycle": "Ciclo de Bomba",
+    "Pump": "Bomba",
+    "PumpOnTime": "Bomba ON (tiempo)",
+    "PumpOffTime": "Bomba OFF (tiempo)",
     "EnableBoilKettle": "Habilitar Olla de Hervido"
   },
   "WiFiSettings": {

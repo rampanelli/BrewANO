@@ -110,11 +110,9 @@
     "AuxiliarySensor1": "Sensore Ausiliario 1",
     "AuxiliarySensor2": "Sensore Ausiliario 2",
     "AuxiliarySensor3": "Sensore Ausiliario 3",
-    "PumpON": "Pompa ON",
-    "PumpOFF": "Pompa OFF",
-    "PumpRestInterval": "Pompa ON (sec)",
-    "PumpRestTime": "Pompa OFF (sec)",
-    "PumpCycle": "Ciclo Pompa",
+    "Pump": "Pompa",
+    "PumpOnTime": "Pompa ON (tempo)",
+    "PumpOffTime": "Pompa OFF (tempo)",
     "EnableBoilKettle": "Abilita Pentola Bollitura"
   },
   "WiFiSettings": {

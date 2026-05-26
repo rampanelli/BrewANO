@@ -284,11 +284,11 @@ class BrewSettingsForm extends Component {
 
                   <Grid item xs={6}>
                     <Paper className={classes.root} style={PaperStyle}>
-                      <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.PumpON" />}</Typography>
+                      <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.Pump" />}</Typography>
                       <TextValidator className={classes.formControl}
                         name="pri"
                         validators={['required']}
-                        label={<IntText text="BrewSettings.PumpRestInterval" />}
+                        label={<IntText text="BrewSettings.PumpOnTime" />}
                         type="number"
                         fullWidth
                         InputProps={{ endAdornment: <InputAdornment position="start">sec</InputAdornment> }}
@@ -299,7 +299,7 @@ class BrewSettingsForm extends Component {
                       <TextValidator className={classes.formControl}
                         name="prt"
                         validators={['required']}
-                        label={<IntText text="BrewSettings.PumpRestTime" />}
+                        label={<IntText text="BrewSettings.PumpOffTime" />}
                         type="number"
                         fullWidth
                         InputProps={{ endAdornment: <InputAdornment position="start">sec</InputAdornment> }}
