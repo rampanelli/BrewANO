@@ -391,6 +391,7 @@ class ClassicGaugeItem extends Component {
                 outerRadius={50}
                 paddingAngle={3}
                 stroke={0}
+                label={false}
               >
                 {this.props.data.map((entry, index) => (
                   <Cell key={index} fill={this.props.colors[index % this.props.colors.length]} />
