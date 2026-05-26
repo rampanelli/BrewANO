@@ -22,6 +22,17 @@ String TemperatureService::GetFirstSensorAddress()
     return GetAddressToString(Thermometer);
 }
 
+String TemperatureService::GetSensorAddress(int index)
+{
+    DeviceAddress Thermometer;
+    if (index >= 0 && index < DeviceCount)
+    {
+        _dallasTemperature.getAddress(Thermometer, index);
+        return GetAddressToString(Thermometer);
+    }
+    return "";
+}
+
 String json = "";
 
 String TemperatureService::GetSensorsJson()

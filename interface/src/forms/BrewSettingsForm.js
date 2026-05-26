@@ -78,7 +78,18 @@ class BrewSettingsForm extends Component {
                       >
                         <MenuItem value={'en'}><IntText text="English" /></MenuItem>
                         <MenuItem value={'pt-BR'}><IntText text="Portuguese" /></MenuItem>
+                        <MenuItem value={'es'}><IntText text="Spanish" /></MenuItem>
+                        <MenuItem value={'de'}><IntText text="German" /></MenuItem>
+                        <MenuItem value={'fr'}><IntText text="French" /></MenuItem>
+                        <MenuItem value={'it'}><IntText text="Italian" /></MenuItem>
+                        <MenuItem value={'ja'}><IntText text="Japanese" /></MenuItem>
                         <MenuItem value={'ru-RU'}><IntText text="Russian" /></MenuItem>
+                        <MenuItem value={'nl'}><IntText text="Dutch" /></MenuItem>
+                        <MenuItem value={'pl'}><IntText text="Polish" /></MenuItem>
+                        <MenuItem value={'sv'}><IntText text="Swedish" /></MenuItem>
+                        <MenuItem value={'no'}><IntText text="Norwegian" /></MenuItem>
+                        <MenuItem value={'da'}><IntText text="Danish" /></MenuItem>
+                        <MenuItem value={'cs'}><IntText text="Czech" /></MenuItem>
                       </Select>
                       <Typography className={classes.formControl} color="textSecondary"><IntText text="TemperatureUnit" /></Typography>
                       <Select className={classes.formControl}
@@ -274,7 +285,7 @@ class BrewSettingsForm extends Component {
 
                   <Grid item xs={6}>
                     <Paper className={classes.root} style={PaperStyle}>
-                      <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.PumpCycle" />}</Typography>
+                      <Typography className={classes.formControl} color="textSecondary">{<IntText text="BrewSettings.PumpON" />}</Typography>
                       <TextValidator className={classes.formControl}
                         name="pri"
                         validators={['required']}

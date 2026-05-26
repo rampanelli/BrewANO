@@ -43,26 +43,26 @@ const classicTheme = createMuiTheme({
 
 const modernTheme = createMuiTheme({
   palette: {
-    type: 'light',
+    type: 'dark',
     primary: {
-      main: '#1a1a2e',
-      light: '#16213e',
-      dark: '#0f3460',
+      main: '#7c3aed',
+      light: '#a78bfa',
+      dark: '#5b21b6',
       contrastText: '#ffffff',
     },
     secondary: {
-      light: '#ffe0b2',
-      main: '#ffa726',
-      dark: '#ff9800',
-      contrastText: '#ffffff',
+      light: '#fbbf24',
+      main: '#f59e0b',
+      dark: '#d97706',
+      contrastText: '#1a1c28',
     },
     background: {
-      default: '#f5f6fa',
-      paper: '#ffffff',
+      default: '#0f111a',
+      paper: '#1a1c28',
     },
     text: {
-      primary: '#2c3e50',
-      secondary: '#7f8c8d',
+      primary: '#e1e4ed',
+      secondary: '#8b8fa3',
     },
   },
   typography: {
@@ -77,15 +77,15 @@ const modernTheme = createMuiTheme({
     },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 10,
   },
   overrides: {
     MuiPaper: {
       root: {
-        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
+        boxShadow: '0 2px 12px rgba(0,0,0,0.4)',
       },
       rounded: {
-        borderRadius: 12,
+        borderRadius: 10,
       },
     },
     MuiButton: {
@@ -97,18 +97,25 @@ const modernTheme = createMuiTheme({
       contained: {
         boxShadow: 'none',
         '&:hover': {
-          boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+          boxShadow: '0 4px 16px rgba(124,58,237,0.3)',
+        },
+      },
+      containedSecondary: {
+        '&:hover': {
+          boxShadow: '0 4px 16px rgba(245,158,11,0.3)',
         },
       },
     },
     MuiCard: {
       root: {
-        borderRadius: 12,
-        boxShadow: '0 2px 12px rgba(0,0,0,0.06)',
-        transition: 'box-shadow 0.3s ease, transform 0.3s ease',
+        borderRadius: 10,
+        boxShadow: '0 2px 12px rgba(0,0,0,0.3)',
+        border: '1px solid rgba(255,255,255,0.05)',
+        transition: 'box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease',
         '&:hover': {
-          boxShadow: '0 8px 24px rgba(0,0,0,0.12)',
+          boxShadow: '0 8px 24px rgba(0,0,0,0.5)',
           transform: 'translateY(-2px)',
+          borderColor: 'rgba(124,58,237,0.3)',
         },
       },
     },
@@ -126,37 +133,55 @@ const modernTheme = createMuiTheme({
     },
     MuiDialog: {
       paper: {
-        borderRadius: 16,
+        borderRadius: 14,
       },
     },
     MuiSlider: {
-      track: { backgroundColor: '#ffa726' },
-      thumb: { backgroundColor: '#ffa726' },
+      track: { backgroundColor: '#7c3aed' },
+      thumb: { backgroundColor: '#a78bfa' },
     },
     MuiSwitch: {
       switchBase: {
         '&.Mui-checked': {
-          color: '#ffa726',
+          color: '#7c3aed',
         },
       },
       colorPrimary: {
         '&.Mui-checked + .MuiSwitch-track': {
-          backgroundColor: '#ffa726',
+          backgroundColor: '#a78bfa',
         },
       },
     },
     MuiAppBar: {
       colorPrimary: {
-        backgroundColor: '#1a1a2e',
+        backgroundColor: '#13152a',
       },
     },
     MuiTableCell: {
       head: {
         fontWeight: 700,
-        color: '#7f8c8d',
+        color: '#8b8fa3',
         fontSize: '0.7rem',
         textTransform: 'uppercase',
         letterSpacing: '0.05em',
+      },
+    },
+    MuiDivider: {
+      root: {
+        backgroundColor: 'rgba(255,255,255,0.06)',
+      },
+    },
+    MuiTab: {
+      root: {
+        textTransform: 'none',
+        fontWeight: 500,
+      },
+    },
+    MuiIconButton: {
+      root: {
+        '&:hover': {
+          backgroundColor: 'rgba(124,58,237,0.12)',
+        },
       },
     },
   },
@@ -173,17 +198,17 @@ const jss = create(jssPreset());
 const generateClassName = createGenerateClassName();
 
 const modernStyles = {
-  success: { backgroundColor: '#2ecc71' },
-  error: { backgroundColor: '#e74c3c' },
-  warning: { backgroundColor: '#ffa726' },
-  info: { backgroundColor: '#3498db' },
+  success: { backgroundColor: '#10b981' },
+  error: { backgroundColor: '#ef4444' },
+  warning: { backgroundColor: '#f59e0b' },
+  info: { backgroundColor: '#6366f1' },
 };
 
 class App extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      modernLayout: false,
+      modernLayout: true,
     };
     this.child = React.createRef();
     ExecuteRestCall(BREW_SETTINGS_ENDPOINT, 'GET', json => {

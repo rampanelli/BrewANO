@@ -30,11 +30,12 @@ const styles = theme => ({
   root: {
     width: '100%',
     minHeight: '100%',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#0f111a',
   },
   appBar: {
-    backgroundColor: '#1a1a2e',
-    boxShadow: '0 2px 12px rgba(0,0,0,0.15)',
+    backgroundColor: '#13152a',
+    boxShadow: '0 2px 16px rgba(0,0,0,0.5)',
+    borderBottom: '1px solid rgba(124,58,237,0.15)',
   },
   toolbar: {
     display: 'flex',
@@ -57,11 +58,11 @@ const styles = theme => ({
     fontSize: '0.75rem',
     textTransform: 'none',
     fontWeight: 500,
-    opacity: 0.8,
-    color: '#ffffff',
+    opacity: 0.7,
+    color: '#c4c8d4',
     '&.Mui-selected': {
       opacity: 1,
-      color: '#ffa726',
+      color: '#a78bfa',
       fontWeight: 700,
     },
   },
@@ -71,8 +72,8 @@ const styles = theme => ({
     gap: theme.spacing.unit,
   },
   layoutToggleBtn: {
-    color: '#ffa726',
-    borderColor: 'rgba(255,167,38,0.5)',
+    color: '#a78bfa',
+    borderColor: 'rgba(167,139,250,0.4)',
     fontSize: '0.7rem',
     textTransform: 'none',
     padding: '2px 10px',
@@ -80,8 +81,8 @@ const styles = theme => ({
     minWidth: 'auto',
     borderRadius: 20,
     '&:hover': {
-      borderColor: '#ffa726',
-      backgroundColor: 'rgba(255,167,38,0.1)',
+      borderColor: '#a78bfa',
+      backgroundColor: 'rgba(124,58,237,0.15)',
     },
   },
   content: {
@@ -156,7 +157,7 @@ function ModernMenuAppBar({ classes, children, location }) {
                 onChange={handleTabChange}
                 className={classes.tabs}
                 indicatorColor="primary"
-                TabIndicatorProps={{ style: { backgroundColor: '#ffa726', height: 3 } }}
+                TabIndicatorProps={{ style: { backgroundColor: '#7c3aed', height: 3 } }}
               >
                 {tabRoutes.map(renderNavLink)}
                 {extraRoutes.map(renderNavLink)}

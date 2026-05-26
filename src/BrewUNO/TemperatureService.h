@@ -26,6 +26,7 @@ public:
   String GetAddressToString(DeviceAddress deviceAddress);
   String GetSensorsJson();
   String GetFirstSensorAddress();
+  String GetSensorAddress(int index);
   int DeviceCount;
 
 private:

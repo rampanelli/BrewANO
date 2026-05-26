@@ -198,15 +198,51 @@ void BrewService::begin()
     _boilService->LoadBoilSettings();
     _activeStatus->LoadActiveStatusSettings();
     _activeStatus->BrewStarted = false;
-    if (_temperatureService->DeviceCount == 1)
+
+    int count = _temperatureService->DeviceCount;
+    bool sensorsChanged = false;
+
+    if (count >= 1 && _brewSettingsService->MainSensor == "")
     {
         _brewSettingsService->MainSensor = _temperatureService->GetFirstSensorAddress();
-        _brewSettingsService->BoilSensor = _brewSettingsService->MainSensor;
         _activeStatus->MainSensor = _brewSettingsService->MainSensor;
-        _activeStatus->BoilSensor = _brewSettingsService->BoilSensor;
+        sensorsChanged = true;
     }
-    if (_temperatureService->DeviceCount > 1 && _brewSettingsService->BoilSensor == "")
-        _brewSettingsService->BoilSensor = _temperatureService->GetFirstSensorAddress();
+    if (count >= 2 && _brewSettingsService->SpargeSensor == "")
+    {
+        _brewSettingsService->SpargeSensor = _temperatureService->GetSensorAddress(1);
+        _activeStatus->SpargeSensor = _brewSettingsService->SpargeSensor;
+        sensorsChanged = true;
+    }
+    if (count >= 1 && _brewSettingsService->BoilSensor == "")
+    {
+        _brewSettingsService->BoilSensor = _brewSettingsService->MainSensor;
+        _activeStatus->BoilSensor = _brewSettingsService->BoilSensor;
+        sensorsChanged = true;
+    }
+    if (count >= 3 && _brewSettingsService->AuxOneSensor == "")
+    {
+        _brewSettingsService->AuxOneSensor = _temperatureService->GetSensorAddress(2);
+        _activeStatus->AuxOneSensor = _brewSettingsService->AuxOneSensor;
+        sensorsChanged = true;
+    }
+    if (count >= 4 && _brewSettingsService->AuxTwoSensor == "")
+    {
+        _brewSettingsService->AuxTwoSensor = _temperatureService->GetSensorAddress(3);
+        _activeStatus->AuxTwoSensor = _brewSettingsService->AuxTwoSensor;
+        sensorsChanged = true;
+    }
+    if (count >= 5 && _brewSettingsService->AuxThreeSensor == "")
+    {
+        _brewSettingsService->AuxThreeSensor = _temperatureService->GetSensorAddress(4);
+        _activeStatus->AuxThreeSensor = _brewSettingsService->AuxThreeSensor;
+        sensorsChanged = true;
+    }
+
+    if (sensorsChanged)
+    {
+        _brewSettingsService->writeToFS();
+    }
 }
 
 void BrewService::loop()

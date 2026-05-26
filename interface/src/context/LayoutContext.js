@@ -14,7 +14,7 @@ function getInitialLayout() {
       return stored === 'true';
     }
   } catch (e) {}
-  return false;
+  return true;
 }
 
 export function LayoutProvider({ children }) {

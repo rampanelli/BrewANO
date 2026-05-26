@@ -3,99 +3,148 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
-import { PieChart, Pie, Cell, } from 'recharts';
 import { withStyles } from '@material-ui/core/styles';
-import { getDateTime, pad } from '../components/Utils';
-import { Line } from 'rc-progress';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Divider from '@material-ui/core/Divider';
+import { pad } from '../components/Utils';
 import IntText from './IntText'
 
-const themeMain = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#b5b5b5',
-    },
-    secondary: {
-      main: '#ffca28',
-    },
-  },
-});
-const themeSparge = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#b5b5b5',
-    },
-    secondary: {
-      main: '#ff7301',
-    },
-  },
-});
-const themeBoil = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#b5b5b5',
-    },
-    secondary: {
-      main: '#f44336',
-    },
-  },
-});
-const themeAuxiliary = createMuiTheme({
-  palette: {
-    primary: {
-      main: '#b5b5b5',
-    },
-    secondary: {
-      main: '#ffca28',
-    },
-  },
-});
-
 const styles = theme => ({
-  temperatureCard: {
-    background: "#313131",
+  gaugeCard: {
+    minWidth: 150,
+    maxWidth: 200,
+    flex: 1,
+  },
+  gaugeLabel: {
+    fontSize: '0.7rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    fontWeight: 600,
+    color: theme.palette.text.secondary,
+    marginBottom: 2,
+  },
+  gaugeValue: {
+    fontSize: '1.75rem',
+    fontWeight: 700,
+    color: theme.palette.text.primary,
+    lineHeight: 1.1,
+  },
+  gaugeUnit: {
+    fontSize: '0.85rem',
+    fontWeight: 500,
+    color: theme.palette.text.secondary,
+    marginLeft: 2,
+  },
+  gaugeTarget: {
+    fontSize: '0.65rem',
+    color: theme.palette.text.secondary,
+    marginTop: 2,
+  },
+  gaugeBar: {
+    marginTop: 8,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: 'rgba(255,255,255,0.06)',
+  },
+  gaugeBarFill: {
+    borderRadius: 3,
+    transition: 'width 0.8s ease',
+  },
+  pwmLabel: {
+    fontSize: '0.6rem',
+    textTransform: 'uppercase',
+    fontWeight: 600,
+    color: theme.palette.text.secondary,
+    marginTop: 6,
+    display: 'flex',
+    justifyContent: 'space-between',
+  },
+  timerSection: {
+    minWidth: 150,
+    maxWidth: 200,
+    flex: 1,
+  },
+  timerLabel: {
+    fontSize: '0.7rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.08em',
+    fontWeight: 600,
+    color: theme.palette.text.secondary,
+    marginBottom: 2,
+  },
+  timerValue: {
+    fontSize: '1.75rem',
+    fontWeight: 700,
+    color: '#a78bfa',
+    lineHeight: 1.1,
+    fontFamily: '"SF Mono", "Fira Code", monospace',
+  },
+  timerActive: {
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    marginTop: 4,
+    color: '#10b981',
+  },
+  timerIdle: {
+    fontSize: '0.7rem',
+    fontWeight: 600,
+    marginTop: 4,
+    color: theme.palette.text.secondary,
+  },
+  auxValue: {
+    fontSize: '1.3rem',
+    fontWeight: 700,
+    color: theme.palette.text.primary,
+    lineHeight: 1.1,
+  },
+  auxLabel: {
+    fontSize: '0.65rem',
+    textTransform: 'uppercase',
+    letterSpacing: '0.06em',
+    fontWeight: 600,
+    color: theme.palette.text.secondary,
   },
 });
 
 var cardStyle = {
-  background: '#313131',
+  background: 'inherit',
   display: 'block',
 }
 
 class BrewStatusGadget extends Component {
   constructor(props) {
     super(props)
-
     this.state = {
-      countdown: 0,
-      progressCompleted: 0,
+      countdown: '00:00:00',
     }
   }
 
-  timerProgress = setInterval(() => {
-    this.brewProgress();
-  }, 1000);
+  componentDidMount() {
+    this.timerInterval = setInterval(() => {
+      this.brewProgress();
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    if (this.timerInterval) clearInterval(this.timerInterval);
+  }
 
   brewProgress() {
     if (!this.props.BrewStarted || this.props.StartTime <= 0 || this.props.EndTime <= 0) {
-      this.setState({ countdown: '00:00:00', progressCompleted: 0 })
+      this.setState({ countdown: '00:00:00' })
       return;
     }
     if (this.props.TimeNotSet === 1) {
       this.setState({ countdown: this.props.Count })
       return;
     }
-    var dateEntered = getDateTime(this.props.EndTime);
+    var dateEntered = new Date(this.props.EndTime * 1000);
     var now = new Date();
     var difference = !this.props.StepLocked ? dateEntered.getTime() - now.getTime() : now.getTime() - dateEntered.getTime();
-    if (difference <= 0 && !this.props.StepLocked)
-      this.setState({ countdown: '00:00:00', progressCompleted: 100 })
-    else {
-      var seconds = Math.floor(difference / 1000);
+    if (difference <= 0 && !this.props.StepLocked) {
+      this.setState({ countdown: '00:00:00' })
+    } else {
+      var seconds = Math.floor(Math.abs(difference) / 1000);
       var minutes = Math.floor(seconds / 60);
       var hours = Math.floor(minutes / 60);
-      var days = Math.floor(hours / 24);
       minutes %= 60; seconds %= 60;
       this.setState({
         countdown: pad(hours, 2) + ':' + pad(minutes, 2) + ':' + pad(seconds, 2),
@@ -103,130 +152,119 @@ class BrewStatusGadget extends Component {
     }
   }
 
+  renderGauge(title, value, target, unit, color, pwm) {
+    const { classes } = this.props;
+    const targetNum = parseFloat(target) || 0;
+    const percent = targetNum > 0 ? Math.min(100, (parseFloat(value) / targetNum) * 100) : 0;
+    return (
+      <div className={classes.gaugeCard}>
+        <Card style={cardStyle}>
+          <CardContent style={{ padding: '12px 16px' }}>
+            <Typography className={classes.gaugeLabel}>{title}</Typography>
+            <Typography className={classes.gaugeValue}>
+              {value || '--'}<span className={classes.gaugeUnit}>°{unit || 'C'}</span>
+            </Typography>
+            <Typography className={classes.gaugeTarget}>
+              Target: {target || '--'}°{unit || 'C'}
+            </Typography>
+            <div className={classes.gaugeBar}>
+              <div className={classes.gaugeBarFill} style={{
+                width: percent + '%',
+                height: 6,
+                backgroundColor: color,
+              }} />
+            </div>
+            {pwm != null && (
+              <div className={classes.pwmLabel}>
+                <span>PWM</span>
+                <span style={{ color: color }}>{pwm}%</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  renderAux(title, value, unit) {
+    const { classes } = this.props;
+    return (
+      <div className={classes.gaugeCard}>
+        <Card style={cardStyle}>
+          <CardContent style={{ padding: '10px 16px' }}>
+            <Typography className={classes.auxLabel}>{title}</Typography>
+            <Typography className={classes.auxValue}>
+              {value || '--'}<span className={classes.gaugeUnit}>°{unit || 'C'}</span>
+            </Typography>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   render() {
-    const SPARGEPWMCOLORS = ['#ff7301', '#424242'];
-    const BOILPWMCOLORS = ['#f44336', '#424242'];
-    const TEMPERATURECOLORS = ['#ffca28', '#424242'];
-    const { classes } = this.props
-
-    const getProgressData = (progress) => {
-      return [{ name: 'A', value: progress }, { name: 'B', value: 100 - progress }]
-    }
-
+    const { classes } = this.props;
+    const activeStep = this.props.ActiveStep && this.props.ActiveStep.props ? this.props.ActiveStep.props.text : '';
 
     return (
-      <Grid container spacing={16}>
+      <Grid container spacing={8}>
         <Grid item xs={12}>
-          <Grid container justify="center" spacing={16}>
-            {this.props.ActiveStep.props.text === 'Mash' || this.props.ActiveStep.props.text === 'Stopped' || this.props.EnableBoilKettle ?
-              <BrewStatusGadgetItem className={classes.temperatureCard} theme={themeMain} title={"Main"} colorPWM={"#83f316"} PWM={this.props.PWM} TempUnit={this.props.TempUnit} titlesufix={this.props.TargetTemperature} colors={TEMPERATURECOLORS} value={this.props.Temperature} data={getProgressData(this.props.Temperature)} />
-              : null}
-            {this.props.EnableSparge ?
-              <BrewStatusGadgetItem className={classes.temperatureCard} theme={themeSparge} title={"Secondary"} colorPWM={"#2892ff"} PWM={this.props.SpargePWM} TempUnit={this.props.TempUnit} titlesufix={this.props.SpargeTargetTemperature} colors={SPARGEPWMCOLORS} value={this.props.SpargeTemperature} data={getProgressData(this.props.SpargeTemperature)} />
-              : null}
-            {this.props.EnableBoilKettle || this.props.ActiveStep.props.text === 'Boil' ?
-              <BrewStatusGadgetItem className={classes.temperatureCard} theme={themeBoil} title={"Boil"} colorPWM={"#ffca28"} PWM={this.props.BoilPWM} TempUnit={this.props.TempUnit} titlesufix={this.props.BoilTargetTemperature} colors={BOILPWMCOLORS} value={this.props.BoilTemperature} data={getProgressData(this.props.BoilTemperature)} />
-              : null}
-
-            <Grid item>
-              <Card className={this.props.className} style={cardStyle}>
-                <CardContent>
-                  <div>
-                    <Typography color="textSecondary" variant="subtitle2" gutterBottom><IntText text="Timer" /></Typography>
-                    <Typography variant="h5">{this.state.countdown != undefined ? this.state.countdown : '-'}</Typography>
-                  </div>
-                  &nbsp;
-                    <div style={{ paddingTop: 7, paddingBotton: 0 }}>
-                    <Divider variant="fullWidth" />
-                  </div>
-                  &nbsp;
-                    <div style={{ paddingTop: 7 }}>
-                    <Typography color="textSecondary" variant="caption" gutterBottom><IntText text="Brew.ActiveStep" /></Typography>
-                    <Typography variant="subtitle1">{this.props.ActiveStepName != "" ? this.props.ActiveStepName : '-'}</Typography>
-                  </div>
-                </CardContent>
-              </Card>
-            </Grid>
+          <Grid container spacing={8} style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {this.renderTimer(activeStep)}
+            {this.renderGauge(
+              'Main',
+              this.props.Temperature,
+              this.props.TargetTemperature,
+              this.props.TempUnit,
+              '#10b981',
+              this.props.PWM
+            )}
+            {this.props.EnableSparge && this.renderGauge(
+              'Sparge',
+              this.props.SpargeTemperature,
+              this.props.SpargeTargetTemperature,
+              this.props.TempUnit,
+              '#3b82f6',
+              this.props.SpargePWM
+            )}
+            {this.renderGauge(
+              'Boil',
+              this.props.BoilTemperature,
+              this.props.BoilTargetTemperature,
+              this.props.TempUnit,
+              '#ef4444',
+              this.props.BoilPWM
+            )}
           </Grid>
-          <Grid container justify="center" spacing={16}>
-            {this.props.AuxOneSendorEnabled ?
-              <BrewStatusAuxItem className={classes.temperatureCard} theme={themeAuxiliary} title={"Aux 1"} TempUnit={this.props.TempUnit} titlesufix={this.props.AuxOneTemperature} colors={TEMPERATURECOLORS} value={this.props.AuxOneTemperature} />
-              : null}
-            {this.props.AuxTwoSendorEnabled ?
-              <BrewStatusAuxItem className={classes.temperatureCard} theme={themeAuxiliary} title={"Aux 2"} TempUnit={this.props.TempUnit} titlesufix={this.props.AuxTwoTemperature} colors={TEMPERATURECOLORS} value={this.props.AuxTwoTemperature} />
-              : null}
-            {this.props.AuxThreeSendorEnabled ?
-              <BrewStatusAuxItem className={classes.temperatureCard} theme={themeAuxiliary} title={"Aux 3"} TempUnit={this.props.TempUnit} titlesufix={this.props.AuxThreeTemperature} colors={TEMPERATURECOLORS} value={this.props.AuxThreeTemperature} />
-              : null}
+        </Grid>
+        <Grid item xs={12}>
+          <Grid container spacing={8} style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {this.props.AuxOneSendorEnabled && this.renderAux('Aux 1', this.props.AuxOneTemperature, this.props.TempUnit)}
+            {this.props.AuxTwoSendorEnabled && this.renderAux('Aux 2', this.props.AuxTwoTemperature, this.props.TempUnit)}
+            {this.props.AuxThreeSendorEnabled && this.renderAux('Aux 3', this.props.AuxThreeTemperature, this.props.TempUnit)}
           </Grid>
         </Grid>
       </Grid>
     )
   }
-}
 
-class BrewStatusGadgetItem extends Component {
-  render() {
+  renderTimer(activeStep) {
+    const { classes } = this.props;
+    const isRunning = this.props.BrewStarted && activeStep !== 'Stopped';
     return (
-      <Grid item >
-        <Card className={this.props.className}>
-          <CardContent >
-            <MuiThemeProvider theme={this.props.theme}>
-              <div style={{ display: "flex" }}>
-                <Typography color="primary" variant="subtitle2" gutterBottom noWrap><IntText text={this.props.title} /></Typography>
-                &nbsp;&nbsp;
-              <Typography color="secondary" variant="subtitle2">{this.props.titlesufix} º{this.props.TempUnit}</Typography>
-              </div>
-            </MuiThemeProvider>
-            <PieChart width={100} height={50}>
-              <Pie data={this.props.data}
-                cx={45} cy={45}
-                startAngle={180}
-                endAngle={0}
-                innerRadius={35}
-                outerRadius={50}
-                paddingAngle={3}
-                stroke={0}
-              >
-                {this.props.data.map((entry, index) => <Cell fill={this.props.colors[index % this.props.colors.length]} />)}
-              </Pie>
-            </PieChart>
-            <Typography top="20" align="center" variant="h5" >{this.props.value} º{this.props.TempUnit}</Typography>
-            &nbsp;
-            <div style={{ display: "flex" }}>
-              <Typography color="textSecondary" variant="subtitle2">PWM:</Typography>
-              &nbsp;
-              <Typography color="secondaryText" variant="subtitle2">{this.props.PWM}%</Typography>
-            </div>
-            <Line percent={this.props.PWM} strokeWidth="8" strokeColor={this.props.colorPWM} trailWidth="4" trailColor="#424242" />
+      <div className={classes.timerSection}>
+        <Card style={cardStyle}>
+          <CardContent style={{ padding: '12px 16px' }}>
+            <Typography className={classes.timerLabel}><IntText text="Timer" /></Typography>
+            <Typography className={classes.timerValue}>{this.state.countdown}</Typography>
+            <Typography className={isRunning ? classes.timerActive : classes.timerIdle}>
+              {isRunning ? (this.props.ActiveStepName || activeStep) : <IntText text="Stopped" />}
+            </Typography>
           </CardContent>
         </Card>
-      </Grid>
-
-    )
-  }
-}
-
-class BrewStatusAuxItem extends Component {
-  render() {
-    return (
-      <Grid item>
-        <Card className={this.props.className} style={cardStyle}>
-          <CardContent >
-            <MuiThemeProvider theme={this.props.theme}>
-              <div style={{ display: "flex" }}>
-                <Typography color="primary" variant="subtitle2" gutterBottom noWrap><IntText text={this.props.title} /></Typography>
-              </div>
-              <div style={{ display: "flex" }}>
-                <Typography color="secondary" variant="subtitle2">{this.props.titlesufix} º{this.props.TempUnit}</Typography>
-              </div>
-            </MuiThemeProvider>
-          </CardContent>
-        </Card>
-      </Grid>
-    )
+      </div>
+    );
   }
 }
 
 export default withStyles(styles)(BrewStatusGadget);
-
