@@ -9,7 +9,9 @@
 #include <WiFiStatus.h>
 #include <APStatus.h>
 
-#define PCF8574_ADDRESS 0x20
+#ifndef PCF8574_ADDRESS
+#define PCF8574_ADDRESS 0x38
+#endif
 
 #define apmode_icon 0
 #define stmode_icon 1
