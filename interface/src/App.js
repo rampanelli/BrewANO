@@ -58,11 +58,11 @@ const modernTheme = createMuiTheme({
     },
     background: {
       default: '#0a0a14',
-      paper: '#12121e',
+      paper: '#14142a',
     },
     text: {
-      primary: '#ffffff',
-      secondary: '#a0a0b8',
+      primary: '#f0f0f8',
+      secondary: '#7878a0',
     },
   },
   typography: {
@@ -83,43 +83,36 @@ const modernTheme = createMuiTheme({
   overrides: {
     MuiPaper: {
       root: {
-        backgroundColor: '#12121e',
-        boxShadow: '0 2px 16px rgba(139,92,246,0.08)',
+        backgroundColor: '#14142a',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.3)',
       },
       rounded: {
-        borderRadius: 10,
+        borderRadius: 12,
       },
     },
     MuiButton: {
       root: {
-        borderRadius: 8,
+        borderRadius: 10,
         textTransform: 'none',
         fontWeight: 600,
-        color: '#ffffff',
+        fontSize: '0.8rem',
       },
       contained: {
         boxShadow: 'none',
         '&:hover': {
-          boxShadow: '0 4px 20px rgba(139,92,246,0.4)',
-        },
-      },
-      containedSecondary: {
-        '&:hover': {
-          boxShadow: '0 4px 20px rgba(249,115,22,0.4)',
+          boxShadow: '0 4px 20px rgba(139,92,246,0.3)',
         },
       },
     },
     MuiCard: {
       root: {
-        borderRadius: 10,
-        backgroundColor: '#12121e',
-        boxShadow: '0 2px 16px rgba(139,92,246,0.06)',
-        border: '1px solid rgba(139,92,246,0.1)',
-        transition: 'box-shadow 0.3s ease, transform 0.3s ease, border-color 0.3s ease',
+        borderRadius: 12,
+        backgroundColor: '#14142a',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
+        border: '1px solid rgba(139,92,246,0.06)',
+        transition: 'box-shadow 0.2s ease',
         '&:hover': {
-          boxShadow: '0 8px 32px rgba(139,92,246,0.2)',
-          transform: 'translateY(-2px)',
-          borderColor: 'rgba(139,92,246,0.3)',
+          boxShadow: '0 4px 16px rgba(139,92,246,0.12)',
         },
       },
     },
@@ -138,7 +131,13 @@ const modernTheme = createMuiTheme({
     MuiDialog: {
       paper: {
         borderRadius: 14,
-        backgroundColor: '#12121e',
+        backgroundColor: '#14142a',
+      },
+    },
+    MuiAppBar: {
+      colorPrimary: {
+        backgroundColor: 'transparent',
+        boxShadow: 'none',
       },
     },
     MuiSlider: {
@@ -156,11 +155,6 @@ const modernTheme = createMuiTheme({
         '&.Mui-checked + .MuiSwitch-track': {
           backgroundColor: '#b794f4',
         },
-      },
-    },
-    MuiAppBar: {
-      colorPrimary: {
-        backgroundColor: '#0c0c18',
       },
     },
     MuiTableCell: {
