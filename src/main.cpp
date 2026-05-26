@@ -206,6 +206,24 @@ void setup()
   apSettingsService.begin();
   wifiSettingsService.begin();
 
+  // Serve gzipped JS with explicit headers for mobile compatibility
+  server.on("/js/", HTTP_GET, [](AsyncWebServerRequest *request) {
+    String path = request->url();
+    String gzPath = "/www" + path + ".gz";
+    if (SPIFFS.exists(gzPath)) {
+      AsyncWebServerResponse *response = request->beginResponse(SPIFFS, gzPath, "application/javascript");
+      response->addHeader("Content-Encoding", "gzip");
+      request->send(response);
+      return;
+    }
+    String jsPath = "/www" + path;
+    if (SPIFFS.exists(jsPath)) {
+      request->send(SPIFFS, jsPath, "application/javascript");
+      return;
+    }
+    request->send(404);
+  });
+
   // Serving static resources from /www/
   server.serveStatic("/js/", SPIFFS, "/www/js/");
   server.serveStatic("/css/", SPIFFS, "/www/css/");
