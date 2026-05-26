@@ -36,8 +36,10 @@ const classicTheme = createMuiTheme({
       },
     }
   },
-  typography: {
-    useNextVariants: true,
+  typography: { useNextVariants: true },
+  overrides: {
+    MuiButtonBase: { root: { touchAction: 'manipulation' } },
+    MuiIconButton: { root: { minWidth: 44, minHeight: 44 } },
   },
 });
 
@@ -184,9 +186,16 @@ const modernTheme = createMuiTheme({
     MuiIconButton: {
       root: {
         color: '#d0d0e0',
+        minWidth: 44,
+        minHeight: 44,
         '&:hover': {
           backgroundColor: 'rgba(139,92,246,0.12)',
         },
+      },
+    },
+    MuiButtonBase: {
+      root: {
+        touchAction: 'manipulation',
       },
     },
   },
