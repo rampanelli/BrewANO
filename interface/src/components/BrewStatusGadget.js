@@ -378,7 +378,7 @@ class ClassicGaugeItem extends Component {
                 </Typography>
               </div>
             </MuiThemeProvider>
-            <PieChart width={100} height={50}>
+            <PieChart width={100} height={100}>
               <Pie data={this.props.data}
                 cx={45} cy={45}
                 startAngle={180}
