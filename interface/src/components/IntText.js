@@ -10,7 +10,7 @@ var langCache = {
 
 function fetchLang(code) {
   if (langCache[code]) return Promise.resolve(langCache[code]);
-  return fetch("/lang/" + code + ".json.gz")
+  return fetch("/lang/" + code + ".json")
     .then(r => {
       if (!r.ok) throw new Error("lang not found");
       return r.text();
